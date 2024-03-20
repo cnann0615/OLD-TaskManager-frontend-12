@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 
 import { useSelector } from "@/store/store";
 import { tabCategoryContext } from "./TaskList";

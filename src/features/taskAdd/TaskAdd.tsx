@@ -83,7 +83,6 @@ const TaskAdd: React.FC = () => {
     e.preventDefault();
 
     const category = await taskApi.categoryGetById(Number(taskItem.category));
-
     // 新しいタスクオブジェクトを作成
     const newTask: TaskItem = {
       title: taskItem.title,

@@ -27,6 +27,7 @@ type TaskItem = {
 // 未完了タスクリスト
 const InCompletedTaskList: React.FC = () => {
   const dispatch = useDispatch();
+  console.log("これはテストです。");
 
   useEffect(() => {
     // APIを経由してデータベースから未完了タスを取得し、未完了Stateに反映
