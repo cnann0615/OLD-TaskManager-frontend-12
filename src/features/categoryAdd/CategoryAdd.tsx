@@ -1,27 +1,35 @@
 import taskApi from "@/pages/api/task";
 import { categoryAdd } from "@/slices/categorySlice";
 
-import { useState } from "react";
+import { useState, ChangeEvent, FormEvent } from "react";
 import { useDispatch } from "react-redux";
 
+//型定義
+// カテゴリ
+type Category = {
+  id?: number;
+  name: string;
+};
+
+
 // 新規カテゴリ追加画面
-const CategoryAdd = () => {
+const CategoryAdd: React.FC = () => {
   const dispatch = useDispatch();
 
   // フォーム入力値をStateで管理
   const [category, setCategory] = useState({ name: "" });
 
   // カテゴリ名の変更ハンドラ
-  const handleCategoryNameChange = (e) => {
+  const handleCategoryNameChange = (e: ChangeEvent<HTMLInputElement>) => {
     setCategory({ ...category, name: e.target.value });
   };
 
   // 送信ボタン押下時のアクション
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     // ページのリロードを防ぐ
     e.preventDefault();
     // 新しいカテゴリオブジェクトを作成
-    const newCategory = { name: category.name };
+    const newCategory: Category = { name: category.name };
     // 新しいカテゴリをAPI経由でデータベースに追加
     const categoryAddSuccess = await taskApi.categoryAdd(newCategory);
     // カテゴリ名が重複せず追加された場合のみ処理を行う。（重複した場合、nullが返されるため以下の処理は行われない。）

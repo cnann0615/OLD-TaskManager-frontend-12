@@ -1,14 +1,24 @@
-import React, { useState, createContext } from "react";
+import React, { useState, createContext, Dispatch, SetStateAction } from "react";
 import CompletedTaskList from "./CompletedTaskList";
 import InCompletedTaskList from "./InCompletedTaskList";
 import ListTab from "./ListTab";
 
-// 現在のタブカテゴリを管理するStateを作成
-export const tabCategoryContext = createContext();
+// tabCategoryの状態とその更新関数の型を定義
+type TabCategory = {
+  tabCategory: number;
+  setTabCategory: Dispatch<SetStateAction<number>>;
+};
 
-const TaskList = () => {
+
+// 現在のタブカテゴリを管理するStateを作成
+export const tabCategoryContext = createContext<TabCategory>({
+  tabCategory: 0,
+  setTabCategory: () => {}, // この関数はダミー。実際にはuseStateによって提供される関数に置き換わる。
+});
+
+const TaskList: React.FC = () => {
   // 現在のタブカテゴリを管理するStateを作成
-  const [tabCategory, setTabCategory] = useState(0);
+  const [tabCategory, setTabCategory] = useState<number>(0);
 
   return (
     <tabCategoryContext.Provider value={{ tabCategory, setTabCategory }}>

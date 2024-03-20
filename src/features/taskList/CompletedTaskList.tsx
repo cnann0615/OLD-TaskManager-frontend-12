@@ -3,18 +3,35 @@ import { taskAdd, taskDelete } from "@/slices/completedTaskSlice";
 import { taskAdd as inCompletedTaskAdd } from "@/slices/inCompletedTaskSlice";
 
 import { useContext, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 
+import { useSelector } from "@/store/store";
 import { tabCategoryContext } from "./TaskList";
 
+//型定義
+// カテゴリ
+type Category = {
+  id: number;
+  name: string;
+};
+// 完了タスク
+type TaskItem = {
+  id: number;
+  title: string;
+  deadLine: string;
+  category: Category;
+  memo: string;
+  isComplete: boolean;
+};
+
 // 完了タスクリスト
-const CompletedTaskList = () => {
+const CompletedTaskList: React.FC = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
     // APIを経由してデータベースから完了タスクを取得し、完了タスクStateに反映
     (async () => {
-      const completedTaskItems = await taskApi.completedTaskGet();
+      const completedTaskItems: TaskItem[] = await taskApi.completedTaskGet();
       completedTaskItems.map((completedTaskItem) =>
         dispatch(taskAdd(completedTaskItem))
       );
@@ -36,7 +53,7 @@ const CompletedTaskList = () => {
   
 
   // タスク未完了処理（buttonのonClick時に発火）
-  const switchInCompleted = async (updateTask) => {
+  const switchInCompleted = async (updateTask: TaskItem) => {
     // APIを経由してデータベースを更新
     await taskApi.switchIsCompleted(updateTask.id);
     // 完了タスクStateから削除

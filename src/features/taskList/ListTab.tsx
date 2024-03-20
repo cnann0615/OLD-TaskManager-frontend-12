@@ -1,16 +1,16 @@
 import { useContext, useEffect } from "react";
-import { useSelector } from "react-redux";
 
+import { useSelector } from "@/store/store";
 import { tabCategoryContext } from "./TaskList";
 
-const ListTab = () => {
+const ListTab: React.FC = () => {
   // カテゴリStateを取得
   const categories = useSelector((state) => state.categories);
 
   //   タブカテゴリ管理State
-  const { tabCategory, setTabCategory } = useContext(tabCategoryContext);
+  const { setTabCategory } = useContext(tabCategoryContext);
   
-  const switchTab = (id) => {
+  const switchTab = (id: number) => {
     setTabCategory(id);
   };
 
@@ -21,7 +21,7 @@ const ListTab = () => {
         <button
           key={category.id}
           value={category.name}
-          onClick={() => switchTab(category.id)}
+          onClick={() => switchTab(category.id!)}
         >
           {category.name}
         </button>
