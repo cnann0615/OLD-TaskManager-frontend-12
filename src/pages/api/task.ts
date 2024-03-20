@@ -38,7 +38,7 @@ const taskApi = {
         return result.data;
     },
     // 完了タスク取得
-    async completedTaskGet() {
+    async completedTaskGet(){ 
         const result = await axios.get(ENDPOINT_URL + "/completedTask");
         return result.data;
     },

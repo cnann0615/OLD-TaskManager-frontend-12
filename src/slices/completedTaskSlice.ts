@@ -4,12 +4,12 @@ import { createSlice } from "@reduxjs/toolkit";
 //型定義
 // カテゴリ
 type Category = {
-  id: number;
+  id?: number;
   name: string;
 };
 // 完了タスク
 type TaskItem = {
-  id: number;
+  id?: number;
   title: string;
   deadLine: string;
   category: Category;

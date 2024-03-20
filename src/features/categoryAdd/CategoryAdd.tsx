@@ -17,7 +17,7 @@ const CategoryAdd: React.FC = () => {
   const dispatch = useDispatch();
 
   // フォーム入力値をStateで管理
-  const [category, setCategory] = useState({ name: "" });
+  const [category, setCategory] = useState<Category>({ name: "" });
 
   // カテゴリ名の変更ハンドラ
   const handleCategoryNameChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -31,12 +31,12 @@ const CategoryAdd: React.FC = () => {
     // 新しいカテゴリオブジェクトを作成
     const newCategory: Category = { name: category.name };
     // 新しいカテゴリをAPI経由でデータベースに追加
-    const categoryAddSuccess = await taskApi.categoryAdd(newCategory);
+    const categoryAddSuccess: Category = await taskApi.categoryAdd(newCategory);
     // カテゴリ名が重複せず追加された場合のみ処理を行う。（重複した場合、nullが返されるため以下の処理は行われない。）
     categoryAddSuccess &&
       (async () => {
         // IDが設定された新しいカテゴリを再度APIを経由してデータベースから取得
-        const _newCategory = await taskApi.latestCategoryGet();
+        const _newCategory: Category = await taskApi.latestCategoryGet();
         // 新しいカテゴリをカテゴリのStateに追加
         dispatch(categoryAdd(_newCategory));
       })();

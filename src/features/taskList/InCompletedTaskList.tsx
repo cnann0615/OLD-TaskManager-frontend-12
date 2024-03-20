@@ -11,12 +11,12 @@ import { tabCategoryContext } from "./TaskList";
 //型定義
 // カテゴリ
 type Category = {
-  id: number;
+  id?: number;
   name: string;
 };
 // 完了タスク
 type TaskItem = {
-  id: number;
+  id?: number;
   title: string;
   deadLine: string;
   category: Category;
@@ -27,7 +27,6 @@ type TaskItem = {
 // 未完了タスクリスト
 const InCompletedTaskList: React.FC = () => {
   const dispatch = useDispatch();
-  console.log("これはテストです。");
 
   useEffect(() => {
     // APIを経由してデータベースから未完了タスを取得し、未完了Stateに反映

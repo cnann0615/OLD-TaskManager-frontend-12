@@ -51,7 +51,7 @@ const TaskAdd: React.FC = () => {
     }
   }, [categories.categories]);
 
-  // フォーム入力値をStateで管理
+  // フォーム入力値をStateで管理(categoryは文字列型)
   const [taskItem, setTaskItem] = useState({
     title: "",
     deadLine: "",
@@ -82,7 +82,8 @@ const TaskAdd: React.FC = () => {
     // ページのリロードを防ぐ
     e.preventDefault();
 
-    const category = await taskApi.categoryGetById(Number(taskItem.category));
+    // フォーム入力値のcategoryのidをもとに、APIでカテゴリを取得
+    const category: Category = await taskApi.categoryGetById(Number(taskItem.category));
     // 新しいタスクオブジェクトを作成
     const newTask: TaskItem = {
       title: taskItem.title,
@@ -95,7 +96,7 @@ const TaskAdd: React.FC = () => {
     // 新しいタスクをAPI経由でデータベースに追加
     await taskApi.taskAdd(newTask);
     // IDが設定された新しいタスクを再度APIを経由してデータベースから取得
-    const _newTask = await taskApi.latestTaskGet();
+    const _newTask: TaskItem = await taskApi.latestTaskGet();
     // 新しいタスクを未完了タスクのStateに追加
     dispatch(taskAdd(_newTask));
     // フォームの入力値をリセット
