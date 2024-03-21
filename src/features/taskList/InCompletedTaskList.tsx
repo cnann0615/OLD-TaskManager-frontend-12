@@ -17,7 +17,7 @@ const InCompletedTaskList: React.FC = () => {
     // APIを経由してデータベースから未完了タスを取得し、未完了Stateに反映
     (async () => {
       const inCompletedTaskItems: TaskItem[] = await taskApi.inCompletedTaskGet();
-      inCompletedTaskItems.map((inCompletedTaskItem) =>
+      inCompletedTaskItems.forEach((inCompletedTaskItem) =>
         dispatch(taskAdd(inCompletedTaskItem))
       );
     })();

@@ -15,12 +15,13 @@ const TaskAdd: React.FC = () => {
 
   // カテゴリStateを取得
   const categories = useSelector((state) => state.categories);
+  
 
   useEffect(() => {
     // APIを経由してデータベースからカテゴリを取得し、カテゴリStateに反映
     (async () => {
       const categories: Category[] = await taskApi.categoryGetAll();
-      categories.map((category) => dispatch(categoryAdd(category)));
+      categories.forEach((category) => dispatch(categoryAdd(category)));
     })();
   }, []);
 
@@ -35,6 +36,7 @@ const TaskAdd: React.FC = () => {
       }));
     }
   }, [categories.categories]);
+
 
   // フォーム入力値をStateで管理(categoryは文字列型)
   const [taskItem, setTaskItem] = useState({

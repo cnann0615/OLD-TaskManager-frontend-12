@@ -19,7 +19,7 @@ const CompletedTaskList: React.FC = () => {
     // APIを経由してデータベースから完了タスクを取得し、完了タスクStateに反映
     (async () => {
       const completedTaskItems: TaskItem[] = await taskApi.completedTaskGet();
-      completedTaskItems.map((completedTaskItem) =>
+      completedTaskItems.forEach((completedTaskItem) =>
         dispatch(taskAdd(completedTaskItem))
       );
     })();

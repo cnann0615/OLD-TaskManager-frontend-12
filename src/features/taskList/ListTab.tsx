@@ -6,7 +6,6 @@ import { tabCategoryContext } from "./TaskList";
 const ListTab: React.FC = () => {
   // カテゴリStateを取得
   const categories = useSelector((state) => state.categories);
-  console.log(categories);
 
   //   タブカテゴリ管理State
   const { setTabCategory } = useContext(tabCategoryContext);
