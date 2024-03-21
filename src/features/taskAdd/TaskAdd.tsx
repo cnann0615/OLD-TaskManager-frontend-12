@@ -6,22 +6,7 @@ import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { useDispatch } from "react-redux";
 
 import { useSelector } from "@/store/store";
-
-//型定義
-// カテゴリ
-type Category = {
-  id?: number;
-  name: string;
-};
-// 完了タスク
-type TaskItem = {
-  id?: number;
-  title: string;
-  deadLine: string;
-  category: Category;
-  memo: string;
-  isComplete: boolean;
-};
+import { Category, TaskItem } from "@/@types";
 
 
 // 新規タスク追加画面

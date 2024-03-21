@@ -1,20 +1,5 @@
+import { TaskItem } from "@/@types";
 import { createSlice } from "@reduxjs/toolkit";
-
-//型定義
-// カテゴリ
-type Category = {
-  id?: number;
-  name: string;
-};
-// 完了タスク
-type TaskItem = {
-  id?: number;
-  title: string;
-  deadLine: string;
-  category: Category;
-  memo: string;
-  isComplete: boolean;
-};
 
 // カテゴリを管理するスライスの初期状態
 const initialState: { inCompletedTaskItems: TaskItem[] } = {

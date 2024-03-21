@@ -7,22 +7,7 @@ import { useDispatch } from "react-redux";
 
 import { useSelector } from "@/store/store";
 import { tabCategoryContext } from "./TaskList";
-
-//型定義
-// カテゴリ
-type Category = {
-  id?: number;
-  name: string;
-};
-// 完了タスク
-type TaskItem = {
-  id?: number;
-  title: string;
-  deadLine: string;
-  category: Category;
-  memo: string;
-  isComplete: boolean;
-};
+import { TaskItem } from "@/@types";
 
 // 未完了タスクリスト
 const InCompletedTaskList: React.FC = () => {

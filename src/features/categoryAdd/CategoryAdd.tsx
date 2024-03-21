@@ -1,15 +1,9 @@
+import { Category } from "@/@types";
 import taskApi from "@/pages/api/task";
 import { categoryAdd } from "@/slices/categorySlice";
 
 import { useState, ChangeEvent, FormEvent } from "react";
 import { useDispatch } from "react-redux";
-
-//型定義
-// カテゴリ
-type Category = {
-  id?: number;
-  name: string;
-};
 
 
 // 新規カテゴリ追加画面
