@@ -1,12 +1,10 @@
 import { TaskItem } from "@/@types";
 import { createSlice } from "@reduxjs/toolkit";
 
-
 // カテゴリを管理するスライスの初期状態
 const initialState: { completedTaskItems: TaskItem[] } = {
   completedTaskItems: [],
 };
-
 
 // 完了タスクを管理
 export const completedTaskItemsSlice = createSlice({
@@ -29,6 +27,5 @@ export const completedTaskItemsSlice = createSlice({
   },
 });
 
-export const { taskAdd, taskDelete } =
-  completedTaskItemsSlice.actions;
+export const { taskAdd, taskDelete } = completedTaskItemsSlice.actions;
 export default completedTaskItemsSlice.reducer;

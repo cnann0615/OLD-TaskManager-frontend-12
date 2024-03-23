@@ -16,7 +16,8 @@ const InCompletedTaskList: React.FC = () => {
   useEffect(() => {
     // APIを経由してデータベースから未完了タスを取得し、未完了Stateに反映
     (async () => {
-      const inCompletedTaskItems: TaskItem[] = await taskApi.inCompletedTaskGet();
+      const inCompletedTaskItems: TaskItem[] =
+        await taskApi.inCompletedTaskGet();
       inCompletedTaskItems.forEach((inCompletedTaskItem) =>
         dispatch(taskAdd(inCompletedTaskItem))
       );
@@ -51,28 +52,33 @@ const InCompletedTaskList: React.FC = () => {
   };
 
   return (
-    <div>
-      <h2>未完了タスク</h2>
-      <table>
+    <div className="mt-4">
+      <h2 className="text-xl font-bold mb-2">未完了タスク</h2>
+      <table className="table-auto w-full">
         <thead>
-          <tr>
-            <th>Check</th>
-            <th>タイトル</th>
-            <th>期日</th>
+          <tr className="bg-gray-200">
+            <th className="px-4 py-2">Check</th>
+            <th className="px-4 py-2">タイトル</th>
+            <th className="px-4 py-2">期日</th>
           </tr>
         </thead>
         <tbody>
           {filteredInCompletedTaskItems?.map((filteredInCompletedTaskItem) => (
-            <tr key={filteredInCompletedTaskItem.id}>
-              <td>
+            <tr key={filteredInCompletedTaskItem.id} className="bg-white">
+              <td className="border px-4 py-2">
                 <button
                   onClick={() => switchCompleted(filteredInCompletedTaskItem)}
+                  className="text-blue-500 hover:text-blue-700"
                 >
                   ◻︎
                 </button>
               </td>
-              <td>{filteredInCompletedTaskItem.title}</td>
-              <td>{filteredInCompletedTaskItem.deadLine}</td>
+              <td className="border px-4 py-2">
+                {filteredInCompletedTaskItem.title}
+              </td>
+              <td className="border px-4 py-2">
+                {filteredInCompletedTaskItem.deadLine}
+              </td>
             </tr>
           ))}
         </tbody>

@@ -2,7 +2,10 @@ import { configureStore } from "@reduxjs/toolkit";
 import completedTaskItemsReducer from "@/slices/completedTaskSlice";
 import inCompletedTaskItemsReducer from "@/slices/inCompletedTaskSlice";
 import categoriesReducer from "@/slices/categorySlice";
-import { useSelector as rawUseSelector, TypedUseSelectorHook } from 'react-redux';
+import {
+  useSelector as rawUseSelector,
+  TypedUseSelectorHook,
+} from "react-redux";
 
 export const store = configureStore({
   reducer: {
@@ -14,7 +17,6 @@ export const store = configureStore({
     categories: categoriesReducer,
   },
 });
-
 
 // storeのgetStateメソッドの戻り値の型を利用して、アプリケーション全体で利用するRootState型を作成
 export type RootState = ReturnType<typeof store.getState>;

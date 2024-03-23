@@ -27,6 +27,5 @@ export const inCompletedTaskItemsSlice = createSlice({
   },
 });
 
-export const { taskAdd, taskDelete } =
-  inCompletedTaskItemsSlice.actions;
+export const { taskAdd, taskDelete } = inCompletedTaskItemsSlice.actions;
 export default inCompletedTaskItemsSlice.reducer;

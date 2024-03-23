@@ -9,8 +9,6 @@ import { useSelector } from "@/store/store";
 import { tabCategoryContext } from "./TaskList";
 import { TaskItem } from "@/@types";
 
-
-
 // 完了タスクリスト
 const CompletedTaskList: React.FC = () => {
   const dispatch = useDispatch();
@@ -32,12 +30,12 @@ const CompletedTaskList: React.FC = () => {
   const { tabCategory } = useContext(tabCategoryContext);
 
   // リストに表示するタスクをtabCategoryの値で絞って抽出(tabCategory「０（全てのタスク）」の時は絞り込まない。）
-  const filteredCompletedTaskItems = tabCategory === 0
-  ? completedTaskItems.completedTaskItems
-  : completedTaskItems.completedTaskItems.filter(
-      completedTaskItem => completedTaskItem.category.id == tabCategory
-    );
-  
+  const filteredCompletedTaskItems =
+    tabCategory === 0
+      ? completedTaskItems.completedTaskItems
+      : completedTaskItems.completedTaskItems.filter(
+          (completedTaskItem) => completedTaskItem.category.id == tabCategory
+        );
 
   // タスク未完了処理（buttonのonClick時に発火）
   const switchInCompleted = async (updateTask: TaskItem) => {
@@ -50,28 +48,33 @@ const CompletedTaskList: React.FC = () => {
   };
 
   return (
-    <div>
-      <h2>完了タスク</h2>
-      <table>
+    <div className="mt-4">
+      <h2 className="text-xl font-bold mb-2">完了タスク</h2>
+      <table className="table-auto w-full">
         <thead>
-          <tr>
-            <th>Check</th>
-            <th>タイトル</th>
-            <th>期日</th>
+          <tr className="bg-gray-200">
+            <th className="px-4 py-2">Check</th>
+            <th className="px-4 py-2">タイトル</th>
+            <th className="px-4 py-2">期日</th>
           </tr>
         </thead>
         <tbody>
           {filteredCompletedTaskItems?.map((filteredCompletedTaskItem) => (
-            <tr key={filteredCompletedTaskItem.id}>
-              <td>
+            <tr key={filteredCompletedTaskItem.id} className="bg-white">
+              <td className="border px-4 py-2">
                 <button
                   onClick={() => switchInCompleted(filteredCompletedTaskItem)}
+                  className="text-blue-500 hover:text-blue-700"
                 >
                   ◻︎
                 </button>
               </td>
-              <td>{filteredCompletedTaskItem.title}</td>
-              <td>{filteredCompletedTaskItem.deadLine}</td>
+              <td className="border px-4 py-2">
+                {filteredCompletedTaskItem.title}
+              </td>
+              <td className="border px-4 py-2">
+                {filteredCompletedTaskItem.deadLine}
+              </td>
             </tr>
           ))}
         </tbody>

@@ -4,7 +4,7 @@ import taskApi from "@/pages/api/task";
 import { useSelector } from "@/store/store";
 import { Category, TaskItem, inputTaskItem } from "@/@types";
 
-import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 
@@ -58,41 +58,37 @@ const TaskAdd: React.FC = () => {
     reset();
   };
 
-  // // タスク追加フォームのカテゴリ項目の初期値を設定
-  // useEffect(() => {
-  //   // カテゴリStateが空でない＆タスク追加フォームのカテゴリ項目が未選択の場合、カテゴリStateの先頭のカテゴリを初期値に設定
-  //   // categories.categoriesが更新されたらその都度変わる。
-  //   if (categories.categories.length > 0 && !taskItem.category) {
-  //     setTaskItem((state) => ({
-  //       ...state,
-  //       category: categories.categories[0].id!.toString(),
-  //     }));
-  //   }
-  // }, [categories]);
-
   if (!isLoading) {
     return (
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <label>
+      <form onSubmit={handleSubmit(onSubmit)} className="max-w-lg mx-auto my-10 p-4 border rounded-lg shadow">
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2">
             タイトル：
             <input
               type="text"
               {...register("title", { required: "タイトルは必須です。" })}
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
-            <p>{errors.title?.message as React.ReactNode}</p>
+            <p className="text-red-500 text-xs italic">{errors.title?.message as React.ReactNode}</p>
           </label>
         </div>
-        <div>
-          <label>
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2">
             期日：
-            <input type="date" {...register("deadLine")} />
+            <input
+              type="date"
+              {...register("deadLine")}
+              className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            />
           </label>
         </div>
-        <div>
-          <label>
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2">
             カテゴリ：
-            <select {...register("category")}>
+            <select
+              {...register("category")}
+              className="block appearance-none w-full bg-white border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+            >
               {categories.categories.map((category) => (
                 <option key={category.id} value={category.id}>
                   {category.name}
@@ -101,14 +97,22 @@ const TaskAdd: React.FC = () => {
             </select>
           </label>
         </div>
-        <div>
-          <label>
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2">
             メモ：
-            <textarea {...register("deadLine")}></textarea>
+            <textarea
+              {...register("memo")}
+              className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            ></textarea>
           </label>
         </div>
-        <div>
-          <button type="submit">送信</button>
+        <div className="flex items-center justify-between">
+          <button
+            type="submit"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          >
+            送信
+          </button>
         </div>
       </form>
     );

@@ -1,4 +1,9 @@
-import React, { useState, createContext, Dispatch, SetStateAction } from "react";
+import React, {
+  useState,
+  createContext,
+  Dispatch,
+  SetStateAction,
+} from "react";
 import CompletedTaskList from "./CompletedTaskList";
 import InCompletedTaskList from "./InCompletedTaskList";
 import ListTab from "./ListTab";
@@ -8,7 +13,6 @@ type TabCategory = {
   tabCategory: number;
   setTabCategory: Dispatch<SetStateAction<number>>;
 };
-
 
 // 現在のタブカテゴリを管理するStateを作成
 export const tabCategoryContext = createContext<TabCategory>({
