@@ -2,26 +2,22 @@ import { Category } from "@/@types";
 import taskApi from "@/pages/api/task";
 import { categoryAdd } from "@/slices/categorySlice";
 
-import { useState, ChangeEvent, FormEvent } from "react";
+import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-
 
 // 新規カテゴリ追加画面
 const CategoryAdd: React.FC = () => {
   const dispatch = useDispatch();
 
-  // フォーム入力値をStateで管理
-  const [category, setCategory] = useState<Category>({ name: "" });
+  // フォームの処理
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({ mode: "onSubmit" });
 
-  // カテゴリ名の変更ハンドラ
-  const handleCategoryNameChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setCategory({ ...category, name: e.target.value });
-  };
-
-  // 送信ボタン押下時のアクション
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    // ページのリロードを防ぐ
-    e.preventDefault();
+  const onSubmit = async (category: Category) => {
     // 新しいカテゴリオブジェクトを作成
     const newCategory: Category = { name: category.name };
     // 新しいカテゴリをAPI経由でデータベースに追加
@@ -34,22 +30,19 @@ const CategoryAdd: React.FC = () => {
         // 新しいカテゴリをカテゴリのStateに追加
         dispatch(categoryAdd(_newCategory));
       })();
-    // フォームの入力値をリセット
-    setCategory({
-      name: "",
-    });
+    reset();
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div>
         <label>
           カテゴリ名：
           <input
             type="text"
-            value={category.name}
-            onChange={handleCategoryNameChange}
+            {...register("name", { required: "カテゴリ名は必須です。" })}
           />
+          <p>{errors.name?.message as React.ReactNode}</p>
         </label>
       </div>
       <div>

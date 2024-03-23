@@ -3,7 +3,7 @@ export interface Category  {
     id?: number;
     name: string;
   }
-  // 完了タスク
+  // タスク
  export interface TaskItem  {
     id?: number;
     title: string;
@@ -12,3 +12,12 @@ export interface Category  {
     memo: string;
     isComplete: boolean;
   }
+
+  // 入力タスク（formからタスクを追加する時の型）
+  export interface inputTaskItem{
+    title: "",
+    deadLine: "",
+    category: "",
+    memo: "",
+    isComplete: false,
+  };
