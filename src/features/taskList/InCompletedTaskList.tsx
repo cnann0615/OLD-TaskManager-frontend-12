@@ -1,6 +1,7 @@
 import taskApi from "@/pages/api/task";
 import { taskAdd, taskDelete } from "@/slices/inCompletedTaskSlice";
 import { taskAdd as completedTaskAdd } from "@/slices/completedTaskSlice";
+import { showTaskDetailContext } from "@/pages";
 
 import { useContext, useEffect } from "react";
 import { useDispatch } from "react-redux";
@@ -13,16 +14,6 @@ import { TaskItem } from "@/@types";
 const InCompletedTaskList: React.FC = () => {
   const dispatch = useDispatch();
 
-  // APIを経由してデータベースから未完了タスを取得し、未完了Stateに反映
-  useEffect(() => {
-    (async () => {
-      const inCompletedTaskItems: TaskItem[] =
-        await taskApi.inCompletedTaskGet();
-      inCompletedTaskItems.forEach((inCompletedTaskItem) =>
-        dispatch(taskAdd(inCompletedTaskItem))
-      );
-    })();
-  }, []);
 
   // 未完了タスクStateを取得
   const inCompletedTaskItems = useSelector(
@@ -53,8 +44,11 @@ const InCompletedTaskList: React.FC = () => {
   };
 
   // タスク詳細（モーダル）表示処理（タイトルのonClick時に発火）
-  const showTaskDetail = (taskItem: TaskItem) => {
+  //   詳細表示対象タスクState
+  const { setShowTaskDetail } = useContext(showTaskDetailContext);
+  const openTaskDetail = (taskItem: TaskItem) => {
     console.log(taskItem);
+    setShowTaskDetail(taskItem);
   };
 
   return (
@@ -63,15 +57,15 @@ const InCompletedTaskList: React.FC = () => {
       <table className="table-auto w-full">
         <thead>
           <tr className="bg-gray-200">
-            <th className="px-4 py-2">Check</th>
-            <th className="px-4 py-2">タイトル</th>
-            <th className="px-4 py-2">期日</th>
+            <th className="px-4 py-2 w-20">Check</th>
+            <th className="px-4 py-2 w-auto">タイトル</th>
+            <th className="px-4 py-2 w-32">期日</th>
           </tr>
         </thead>
         <tbody>
           {filteredInCompletedTaskItems?.map((filteredInCompletedTaskItem) => (
             <tr key={filteredInCompletedTaskItem.id} className="bg-white">
-              <td className="border px-4 py-2">
+              <td className="border px-4 py-2 w-20 text-center">
                 <button
                   onClick={() => switchCompleted(filteredInCompletedTaskItem)}
                   className="text-blue-500 hover:text-blue-700"
@@ -80,13 +74,12 @@ const InCompletedTaskList: React.FC = () => {
                 </button>
               </td>
               <td
-                className="border px-4 py-2 cursor-pointer hover:bg-gray-100"
-                onClick={() => showTaskDetail(filteredInCompletedTaskItem)}
+                className="border px-4 py-2 cursor-pointer hover:bg-gray-100 w-auto"
+                onClick={() => openTaskDetail(filteredInCompletedTaskItem)}
               >
                 {filteredInCompletedTaskItem.title}
               </td>
-
-              <td className="border px-4 py-2">
+              <td className="border px-4 py-2 w-32 text-center">
                 {filteredInCompletedTaskItem.deadLine}
               </td>
             </tr>

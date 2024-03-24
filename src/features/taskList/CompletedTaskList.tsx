@@ -1,6 +1,7 @@
 import taskApi from "@/pages/api/task";
 import { taskAdd, taskDelete } from "@/slices/completedTaskSlice";
 import { taskAdd as inCompletedTaskAdd } from "@/slices/inCompletedTaskSlice";
+import { showTaskDetailContext } from "@/pages";
 
 import { useContext, useEffect } from "react";
 import { useDispatch } from "react-redux";
@@ -12,16 +13,6 @@ import { TaskItem } from "@/@types";
 // 完了タスクリスト
 const CompletedTaskList: React.FC = () => {
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    // APIを経由してデータベースから完了タスクを取得し、完了タスクStateに反映
-    (async () => {
-      const completedTaskItems: TaskItem[] = await taskApi.completedTaskGet();
-      completedTaskItems.forEach((completedTaskItem) =>
-        dispatch(taskAdd(completedTaskItem))
-      );
-    })();
-  }, []);
 
   // 完了タスクStateを取得
   const completedTaskItems = useSelector((state) => state.completedTaskItems);
@@ -49,8 +40,11 @@ const CompletedTaskList: React.FC = () => {
   };
 
   // タスク詳細（モーダル）表示処理（タイトルのonClick時に発火）
-  const showTaskDetail = (taskItem: TaskItem) => {
+  //   詳細表示対象タスクState
+  const { setShowTaskDetail } = useContext(showTaskDetailContext);
+  const openTaskDetail = (taskItem: TaskItem) => {
     console.log(taskItem);
+    setShowTaskDetail(taskItem);
   };
 
   return (
@@ -59,15 +53,15 @@ const CompletedTaskList: React.FC = () => {
       <table className="table-auto w-full">
         <thead>
           <tr className="bg-gray-200">
-            <th className="px-4 py-2">Check</th>
+            <th className="px-4 py-2 w-12 text-center">Check</th>
             <th className="px-4 py-2">タイトル</th>
-            <th className="px-4 py-2">期日</th>
+            <th className="px-4 py-2 w-32">期日</th>
           </tr>
         </thead>
         <tbody>
           {filteredCompletedTaskItems?.map((filteredCompletedTaskItem) => (
             <tr key={filteredCompletedTaskItem.id} className="bg-white">
-              <td className="border px-4 py-2">
+              <td className="border px-4 py-2 text-center">
                 <button
                   onClick={() => switchInCompleted(filteredCompletedTaskItem)}
                   className="text-blue-500 hover:text-blue-700"
@@ -77,11 +71,10 @@ const CompletedTaskList: React.FC = () => {
               </td>
               <td
                 className="border px-4 py-2 cursor-pointer hover:bg-gray-100"
-                onClick={() => showTaskDetail(filteredCompletedTaskItem)}
+                onClick={() => openTaskDetail(filteredCompletedTaskItem)}
               >
                 {filteredCompletedTaskItem.title}
               </td>
-
               <td className="border px-4 py-2">
                 {filteredCompletedTaskItem.deadLine}
               </td>
