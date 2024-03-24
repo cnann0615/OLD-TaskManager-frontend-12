@@ -13,8 +13,8 @@ import { TaskItem } from "@/@types";
 const InCompletedTaskList: React.FC = () => {
   const dispatch = useDispatch();
 
+  // APIを経由してデータベースから未完了タスを取得し、未完了Stateに反映
   useEffect(() => {
-    // APIを経由してデータベースから未完了タスを取得し、未完了Stateに反映
     (async () => {
       const inCompletedTaskItems: TaskItem[] =
         await taskApi.inCompletedTaskGet();
@@ -47,8 +47,14 @@ const InCompletedTaskList: React.FC = () => {
     await taskApi.switchIsCompleted(updateTask.id);
     // 未完了タスクStateから削除
     dispatch(taskDelete(updateTask));
-    // 完了タスクStateに追加
+    //タスク完了フラグをtrueにし、完了タスクStateに追加
+    updateTask = { ...updateTask, isComplete: true };
     dispatch(completedTaskAdd(updateTask));
+  };
+
+  // タスク詳細（モーダル）表示処理（タイトルのonClick時に発火）
+  const showTaskDetail = (taskItem: TaskItem) => {
+    console.log(taskItem);
   };
 
   return (
@@ -73,9 +79,13 @@ const InCompletedTaskList: React.FC = () => {
                   ◻︎
                 </button>
               </td>
-              <td className="border px-4 py-2">
+              <td
+                className="border px-4 py-2 cursor-pointer hover:bg-gray-100"
+                onClick={() => showTaskDetail(filteredInCompletedTaskItem)}
+              >
                 {filteredInCompletedTaskItem.title}
               </td>
+
               <td className="border px-4 py-2">
                 {filteredInCompletedTaskItem.deadLine}
               </td>

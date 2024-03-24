@@ -34,9 +34,11 @@ const CategoryAdd: React.FC = () => {
   };
 
   return (
+    <div>
+      <h3 className="font-bold">カテゴリ追加</h3>
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="max-w-lg mx-auto my-10 p-4 border rounded-lg shadow"
+      className="mx-auto mt-4 mb-10 p-4 border rounded-lg shadow"
     >
       <div className="mb-4">
         <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -54,10 +56,11 @@ const CategoryAdd: React.FC = () => {
           type="submit"
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
         >
-          送信
+          追加
         </button>
       </div>
     </form>
+    </div>
   );
 };
 

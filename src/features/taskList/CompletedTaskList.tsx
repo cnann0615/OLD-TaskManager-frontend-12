@@ -43,8 +43,14 @@ const CompletedTaskList: React.FC = () => {
     await taskApi.switchIsCompleted(updateTask.id);
     // 完了タスクStateから削除
     dispatch(taskDelete(updateTask));
-    // 未完了タスクStateに追加
+    //タスク完了フラグをfalseにし、未完了タスクStateに追加
+    updateTask = { ...updateTask, isComplete: false };
     dispatch(inCompletedTaskAdd(updateTask));
+  };
+
+  // タスク詳細（モーダル）表示処理（タイトルのonClick時に発火）
+  const showTaskDetail = (taskItem: TaskItem) => {
+    console.log(taskItem);
   };
 
   return (
@@ -66,12 +72,16 @@ const CompletedTaskList: React.FC = () => {
                   onClick={() => switchInCompleted(filteredCompletedTaskItem)}
                   className="text-blue-500 hover:text-blue-700"
                 >
-                  ◻︎
+                  ☑︎
                 </button>
               </td>
-              <td className="border px-4 py-2">
+              <td
+                className="border px-4 py-2 cursor-pointer hover:bg-gray-100"
+                onClick={() => showTaskDetail(filteredCompletedTaskItem)}
+              >
                 {filteredCompletedTaskItem.title}
               </td>
+
               <td className="border px-4 py-2">
                 {filteredCompletedTaskItem.deadLine}
               </td>

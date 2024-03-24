@@ -28,7 +28,6 @@ const TaskAdd: React.FC = () => {
   }, []);
 
   // フォーム入力値をStateで管理(categoryは文字列型)
-
   const {
     register,
     handleSubmit,
@@ -60,7 +59,9 @@ const TaskAdd: React.FC = () => {
 
   if (!isLoading) {
     return (
-      <form onSubmit={handleSubmit(onSubmit)} className="max-w-lg mx-auto my-10 p-4 border rounded-lg shadow">
+      <div>
+        <h3 className="font-bold">タスク作成</h3>
+      <form onSubmit={handleSubmit(onSubmit)} className="mx-auto mt-4 mb-10 p-4 border rounded-lg shadow">
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2">
             タイトル：
@@ -111,10 +112,11 @@ const TaskAdd: React.FC = () => {
             type="submit"
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
           >
-            送信
+            追加
           </button>
         </div>
       </form>
+      </div>
     );
   }
 };
