@@ -1,3 +1,4 @@
+import { Category, TaskItem } from "@/@types";
 import { showTaskDetailContext } from "@/pages";
 import { useSelector } from "@/store/store";
 
@@ -47,10 +48,10 @@ const TaskDetail = () => {
       <table className="min-w-full leading-normal">
         <thead>
           <tr>
-            <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+            <th className="w-1/4 px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
               項目
             </th>
-            <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+            <th className="w-3/4 px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
               内容
             </th>
           </tr>
@@ -85,7 +86,6 @@ const TaskDetail = () => {
             </td>
             <td
               className="px-5 py-5 border-b border-gray-200 bg-white text-sm"
-              onClick={() => toggleEdit("deadLine")}
             >
               {editing.deadLine ? (
                 <input
@@ -96,7 +96,7 @@ const TaskDetail = () => {
                   className="rounded-md border-gray-300 focus:outline-none bg-gray-50"
                 />
               ) : (
-                showTaskDetail.deadLine
+                <div onClick={() => toggleEdit("deadLine")}>{showTaskDetail.deadLine}</div>
               )}
             </td>
           </tr>
@@ -105,16 +105,13 @@ const TaskDetail = () => {
             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
               カテゴリ
             </td>
-            <td
-              className="px-5 py-5 border-b border-gray-200 bg-white text-sm"
-              // onClick={() => toggleEdit("category")}
-            >
+            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
               {editing.category ? (
                 <select
-                  // defaultValue={showTaskDetail.category.name}
-                  // onChange={(e) => saveEdit("category", e.target.value)}
-                  // autoFocus
-                  // className="rounded-md border-gray-300 focus:outline-none bg-gray-50"
+                  defaultValue={showTaskDetail.category.name}
+                  onChange={(e) => saveEdit("category", e.target.value)}
+                  autoFocus
+                  className="rounded-md border-gray-300 focus:outline-none bg-gray-50"
                 >
                   {categories.categories.map((category) => (
                     <option key={category.id} value={category.id}>
@@ -123,7 +120,9 @@ const TaskDetail = () => {
                   ))}
                 </select>
               ) : (
-                showTaskDetail.category.name
+                <div onClick={() => toggleEdit("category")}>
+                  {showTaskDetail.category.name}
+                </div>
               )}
             </td>
           </tr>
@@ -132,10 +131,7 @@ const TaskDetail = () => {
             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
               メモ
             </td>
-            <td
-              className="px-5 py-5 border-b border-gray-200 bg-white text-sm"
-              onClick={() => toggleEdit("memo")}
-            >
+            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
               {editing.memo ? (
                 <textarea
                   defaultValue={showTaskDetail.memo}
@@ -145,12 +141,14 @@ const TaskDetail = () => {
                 />
               ) : (
                 // \nを改行タグ(<br />)に変換して表示
-                showTaskDetail.memo.split("\n").map((line, index) => (
-                  <React.Fragment key={index}>
-                    {line}
-                    <br />
-                  </React.Fragment>
-                ))
+                <div onClick={() => toggleEdit("memo")}>
+                  {showTaskDetail.memo.split("\n").map((line, index) => (
+                    <React.Fragment key={index}>
+                      {line}
+                      <br />
+                    </React.Fragment>
+                  ))}
+                </div>
               )}
             </td>
           </tr>
