@@ -31,17 +31,29 @@ const TaskDetail = () => {
   });
 
   // 編集モードをトグルする関数
-  const toggleEdit = (field) => {
+  const toggleEdit = (field: string) => {
     setEditing((prev) => ({ ...prev, [field]: !prev[field] }));
   };
 
   // 編集内容を保存し、編集モードを終了する関数
-  const saveEdit = (field, value) => {
+  const saveEdit = (field: string, value: any) => {
+    // 編集対象がカテゴリの場合、選択されたカテゴリidに一致するカテゴリオブジェクトを取得
+    if (field === "category") {
+      const selectedCategory = categories.categories.find(
+        (category) => category.id === value
+      );
+      // Contextの更新（この例では簡単のため、Contextを直接更新しています）
+      setShowTaskDetail((prev) => ({ ...prev, [field]: selectedCategory }));
+      // 編集状態のトグル
+      toggleEdit(field);
+    }
+
     // Contextの更新（この例では簡単のため、Contextを直接更新しています）
     setShowTaskDetail((prev) => ({ ...prev, [field]: value }));
     // 編集状態のトグル
     toggleEdit(field);
   };
+  console.log(editing.category);
 
   return (
     <div className="overflow-hidden border rounded-lg">
@@ -64,7 +76,6 @@ const TaskDetail = () => {
             </td>
             <td
               className="px-5 py-5 border-b border-gray-200 bg-white text-sm"
-              onClick={() => toggleEdit("title")}
             >
               {editing.title ? (
                 <input
@@ -75,7 +86,9 @@ const TaskDetail = () => {
                   className="rounded-md border-none focus:outline-none bg-gray-50"
                 />
               ) : (
-                showTaskDetail.title
+                <div onClick={() => toggleEdit("title")}>
+                  {showTaskDetail.title}
+                </div>
               )}
             </td>
           </tr>
@@ -84,9 +97,7 @@ const TaskDetail = () => {
             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
               期日
             </td>
-            <td
-              className="px-5 py-5 border-b border-gray-200 bg-white text-sm"
-            >
+            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
               {editing.deadLine ? (
                 <input
                   type="date"
@@ -96,7 +107,9 @@ const TaskDetail = () => {
                   className="rounded-md border-gray-300 focus:outline-none bg-gray-50"
                 />
               ) : (
-                <div onClick={() => toggleEdit("deadLine")}>{showTaskDetail.deadLine}</div>
+                <div onClick={() => toggleEdit("deadLine")}>
+                  {showTaskDetail.deadLine}
+                </div>
               )}
             </td>
           </tr>
@@ -108,8 +121,10 @@ const TaskDetail = () => {
             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
               {editing.category ? (
                 <select
-                  defaultValue={showTaskDetail.category.name}
-                  onChange={(e) => saveEdit("category", e.target.value)}
+                  defaultValue={showTaskDetail.category.id}
+                  onChange={(e) => {
+                    saveEdit("category", e.target.value);
+                  }}
                   autoFocus
                   className="rounded-md border-gray-300 focus:outline-none bg-gray-50"
                 >
