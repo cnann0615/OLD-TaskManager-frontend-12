@@ -32,6 +32,7 @@ const TaskDetail = () => {
 
   // 編集モードをトグルする関数
   const toggleEdit = (field: string) => {
+    console.log("toggle");
     setEditing((prev) => ({ ...prev, [field]: !prev[field] }));
   };
 
@@ -40,20 +41,24 @@ const TaskDetail = () => {
     // 編集対象がカテゴリの場合、選択されたカテゴリidに一致するカテゴリオブジェクトを取得
     if (field === "category") {
       const selectedCategory = categories.categories.find(
-        (category) => category.id === value
+        (category) => category.id == value
       );
+      console.log(selectedCategory);
       // Contextの更新（この例では簡単のため、Contextを直接更新しています）
       setShowTaskDetail((prev) => ({ ...prev, [field]: selectedCategory }));
       // 編集状態のトグル
       toggleEdit(field);
+    }else{
+      // Contextの更新（この例では簡単のため、Contextを直接更新しています）
+      setShowTaskDetail((prev) => ({ ...prev, [field]: value }));
+      // 編集状態のトグル
+      toggleEdit(field);
     }
 
-    // Contextの更新（この例では簡単のため、Contextを直接更新しています）
-    setShowTaskDetail((prev) => ({ ...prev, [field]: value }));
-    // 編集状態のトグル
-    toggleEdit(field);
   };
-  console.log(editing.category);
+
+  console.log(showTaskDetail);
+  console.log(editing);
 
   return (
     <div className="overflow-hidden border rounded-lg">

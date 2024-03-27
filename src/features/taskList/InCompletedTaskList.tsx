@@ -47,7 +47,6 @@ const InCompletedTaskList: React.FC = () => {
   //   詳細表示対象タスクState
   const { setShowTaskDetail } = useContext(showTaskDetailContext);
   const openTaskDetail = (taskItem: TaskItem) => {
-    console.log(taskItem);
     setShowTaskDetail(taskItem);
   };
 
