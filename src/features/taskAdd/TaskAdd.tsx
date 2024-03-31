@@ -1,4 +1,4 @@
-import { taskAdd } from "../../slices/inCompletedTaskSlice";
+import { inCompletedTaskAdd } from "../../slices/inCompletedTaskSlice";
 import { categoryAdd } from "@/slices/categorySlice";
 import taskApi from "@/pages/api/task";
 import { useSelector } from "@/store/store";
@@ -53,7 +53,7 @@ const TaskAdd: React.FC = () => {
     // IDが設定された新しいタスクを再度APIを経由してデータベースから取得
     const _newTask: TaskItem = await taskApi.latestTaskGet();
     // 新しいタスクを未完了タスクのStateに追加
-    dispatch(taskAdd(_newTask));
+    dispatch(inCompletedTaskAdd(_newTask));
     reset();
   };
 

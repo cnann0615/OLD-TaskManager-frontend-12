@@ -87,6 +87,12 @@ const taskApi = {
   async switchIsCompleted(id: number) {
     await axios.put(ENDPOINT_URL + "/switchIsCompleted/" + id);
   },
+  // 詳細表示画面からの編集
+  async updateTask(taskItem: TaskItem) {
+    console.log(taskItem.category.id);
+    console.log(taskItem);
+    await axios.put(ENDPOINT_URL + "/updateTask", taskItem);
+  },
 };
 
 export default taskApi;

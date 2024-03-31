@@ -12,13 +12,13 @@ export const completedTaskItemsSlice = createSlice({
   initialState,
   reducers: {
     // タスク追加
-    taskAdd: (state, action) => {
+    completedTaskAdd: (state, action) => {
       state.completedTaskItems.push(action.payload);
     },
     // タスク更新
 
     // タスク削除
-    taskDelete: (state, action) => {
+    completedTaskDelete: (state, action) => {
       const deleteTask = action.payload;
       state.completedTaskItems = state.completedTaskItems.filter(
         (completedTaskItem) => completedTaskItem.id !== deleteTask.id
@@ -27,5 +27,5 @@ export const completedTaskItemsSlice = createSlice({
   },
 });
 
-export const { taskAdd, taskDelete } = completedTaskItemsSlice.actions;
+export const { completedTaskAdd, completedTaskDelete } = completedTaskItemsSlice.actions;
 export default completedTaskItemsSlice.reducer;

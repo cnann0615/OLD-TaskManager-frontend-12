@@ -14,7 +14,8 @@ import TaskDetail from "@/features/taskDetails/TaskDetail";
 import { TaskItem } from "@/@types";
 import taskApi from "./api/task";
 import { useDispatch } from "react-redux";
-import { taskAdd } from "@/slices/inCompletedTaskSlice";
+import { inCompletedTaskAdd } from "@/slices/inCompletedTaskSlice";
+import { completedTaskAdd } from "@/slices/completedTaskSlice";
 
 
 
@@ -46,11 +47,11 @@ const Home: NextPage = () => {
       const completedTaskItems: TaskItem[] = await taskApi.completedTaskGet();
       // 未完了タスクをStateに反映
       inCompletedTaskItems.forEach((inCompletedTaskItem) =>
-        dispatch(taskAdd(inCompletedTaskItem))
+        dispatch(inCompletedTaskAdd(inCompletedTaskItem))
       );
       // 完了タスクをStateに反映
       completedTaskItems.forEach((completedTaskItem) =>
-        dispatch(taskAdd(completedTaskItem))
+        dispatch(completedTaskAdd(completedTaskItem))
       );
     })();
   }, []);

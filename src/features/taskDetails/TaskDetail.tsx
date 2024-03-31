@@ -1,11 +1,13 @@
 import { Category, TaskItem } from "@/@types";
 import { showTaskDetailContext } from "@/pages";
+import taskApi from "@/pages/api/task";
 import { useSelector } from "@/store/store";
 
 import React, { useState, useContext } from "react";
 import { useDispatch } from "react-redux";
+import { classicNameResolver } from "typescript";
 
-// タスク詳細（モーダル）コンポーネント
+// タスク詳細コンポーネント
 const TaskDetail = () => {
   const dispatch = useDispatch();
 
@@ -32,33 +34,34 @@ const TaskDetail = () => {
 
   // 編集モードをトグルする関数
   const toggleEdit = (field: string) => {
-    console.log("toggle");
     setEditing((prev) => ({ ...prev, [field]: !prev[field] }));
   };
 
   // 編集内容を保存し、編集モードを終了する関数
-  const saveEdit = (field: string, value: any) => {
+  const saveEdit = async (field: string, value: any) => {
     // 編集対象がカテゴリの場合、選択されたカテゴリidに一致するカテゴリオブジェクトを取得
     if (field === "category") {
       const selectedCategory = categories.categories.find(
         (category) => category.id == value
       );
-      console.log(selectedCategory);
       // Contextの更新（この例では簡単のため、Contextを直接更新しています）
       setShowTaskDetail((prev) => ({ ...prev, [field]: selectedCategory }));
       // 編集状態のトグル
       toggleEdit(field);
-    }else{
+    } else {
       // Contextの更新（この例では簡単のため、Contextを直接更新しています）
       setShowTaskDetail((prev) => ({ ...prev, [field]: value }));
       // 編集状態のトグル
-      toggleEdit(field);
+      toggleEdit(field);  
+      console.log(showTaskDetail);
     }
+      // 未完了or完了タスクStateに保存
 
+
+    // APIを経由してデータベースに保存
+    await taskApi.updateTask(showTaskDetail);
+    
   };
-
-  console.log(showTaskDetail);
-  console.log(editing);
 
   return (
     <div className="overflow-hidden border rounded-lg">
@@ -75,30 +78,30 @@ const TaskDetail = () => {
         </thead>
         <tbody>
           {/* タイトル */}
-          <tr>
+          <tr className="h-20">
             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
               タイトル
             </td>
-            <td
-              className="px-5 py-5 border-b border-gray-200 bg-white text-sm"
-            >
+            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
               {editing.title ? (
                 <input
                   type="text"
                   defaultValue={showTaskDetail.title}
-                  onBlur={(e) => saveEdit("title", e.target.value)}
+                  onBlur={(e: React.FocusEvent<HTMLInputElement>) =>
+                    saveEdit("title", e.target.value)
+                  }
                   autoFocus
-                  className="rounded-md border-none focus:outline-none bg-gray-50"
+                  className="rounded-md border-none focus:outline-none bg-gray-50 py-2 pl-1"
                 />
               ) : (
-                <div onClick={() => toggleEdit("title")}>
+                <div onClick={() => toggleEdit("title")} className="pl-1" >
                   {showTaskDetail.title}
                 </div>
               )}
             </td>
           </tr>
           {/* 期日 */}
-          <tr>
+          <tr className="h-20">
             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
               期日
             </td>
@@ -107,19 +110,21 @@ const TaskDetail = () => {
                 <input
                   type="date"
                   defaultValue={showTaskDetail.deadLine}
-                  onBlur={(e) => saveEdit("deadLine", e.target.value)}
+                  onBlur={(e: React.FocusEvent<HTMLInputElement>) =>
+                    saveEdit("deadLine", e.target.value)
+                  }
                   autoFocus
-                  className="rounded-md border-gray-300 focus:outline-none bg-gray-50"
+                  className="rounded-md border-gray-300 focus:outline-none bg-gray-50 py-2 pl-1"
                 />
               ) : (
-                <div onClick={() => toggleEdit("deadLine")}>
+                <div onClick={() => toggleEdit("deadLine")} className="pl-1">
                   {showTaskDetail.deadLine}
                 </div>
               )}
             </td>
           </tr>
           {/* カテゴリ */}
-          <tr>
+          <tr className="h-20">
             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
               カテゴリ
             </td>
@@ -127,11 +132,11 @@ const TaskDetail = () => {
               {editing.category ? (
                 <select
                   defaultValue={showTaskDetail.category.id}
-                  onChange={(e) => {
+                  onBlur={(e: React.FocusEvent<HTMLSelectElement, Element>) => {
                     saveEdit("category", e.target.value);
                   }}
                   autoFocus
-                  className="rounded-md border-gray-300 focus:outline-none bg-gray-50"
+                  className="rounded-md border-gray-300 focus:outline-none bg-gray-50 py-2"
                 >
                   {categories.categories.map((category) => (
                     <option key={category.id} value={category.id}>
@@ -140,7 +145,7 @@ const TaskDetail = () => {
                   ))}
                 </select>
               ) : (
-                <div onClick={() => toggleEdit("category")}>
+                <div onClick={() => toggleEdit("category")} className="pl-1">
                   {showTaskDetail.category.name}
                 </div>
               )}
@@ -148,20 +153,20 @@ const TaskDetail = () => {
           </tr>
           {/* メモ */}
           <tr>
-            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm h-96">
               メモ
             </td>
-            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm h-96">
               {editing.memo ? (
                 <textarea
                   defaultValue={showTaskDetail.memo}
-                  onBlur={(e) => saveEdit("memo", e.target.value)}
+                  onBlur={(e: React.FocusEvent<HTMLTextAreaElement, Element>) => saveEdit("memo", e.target.value)}
                   autoFocus
-                  className="w-full rounded-md border-gray-300 focus:outline-none bg-gray-50"
+                  className="w-full h-80 rounded-md border-gray-300 focus:outline-none bg-gray-50"
                 />
               ) : (
                 // \nを改行タグ(<br />)に変換して表示
-                <div onClick={() => toggleEdit("memo")}>
+                <div onClick={() => toggleEdit("memo")} className="w-full h-80 rounded-md border-gray-300 focus:outline-none">
                   {showTaskDetail.memo.split("\n").map((line, index) => (
                     <React.Fragment key={index}>
                       {line}

@@ -39,7 +39,7 @@ const CompletedTaskList: React.FC = () => {
     dispatch(inCompletedTaskAdd(updateTask));
   };
 
-  // タスク詳細（モーダル）表示処理（タイトルのonClick時に発火）
+  // タスク詳細表示処理（タイトルのonClick時に発火）
   //   詳細表示対象タスクState
   const { setShowTaskDetail } = useContext(showTaskDetailContext);
   const openTaskDetail = (taskItem: TaskItem) => {

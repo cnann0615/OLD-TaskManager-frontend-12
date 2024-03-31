@@ -1,6 +1,6 @@
 import taskApi from "@/pages/api/task";
-import { taskAdd, taskDelete } from "@/slices/inCompletedTaskSlice";
-import { taskAdd as completedTaskAdd } from "@/slices/completedTaskSlice";
+import { inCompletedTaskAdd, inCompletedTaskDelete } from "@/slices/inCompletedTaskSlice";
+import { completedTaskAdd } from "@/slices/completedTaskSlice";
 import { showTaskDetailContext } from "@/pages";
 
 import { useContext, useEffect } from "react";
@@ -37,13 +37,13 @@ const InCompletedTaskList: React.FC = () => {
     // APIを経由してデータベースを更新
     await taskApi.switchIsCompleted(updateTask.id);
     // 未完了タスクStateから削除
-    dispatch(taskDelete(updateTask));
+    dispatch(inCompletedTaskDelete(updateTask));
     //タスク完了フラグをtrueにし、完了タスクStateに追加
     updateTask = { ...updateTask, isComplete: true };
     dispatch(completedTaskAdd(updateTask));
   };
 
-  // タスク詳細（モーダル）表示処理（タイトルのonClick時に発火）
+  // タスク詳細表示処理（タイトルのonClick時に発火）
   //   詳細表示対象タスクState
   const { setShowTaskDetail } = useContext(showTaskDetailContext);
   const openTaskDetail = (taskItem: TaskItem) => {
