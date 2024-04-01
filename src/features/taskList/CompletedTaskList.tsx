@@ -1,6 +1,6 @@
 import taskApi from "@/pages/api/task";
-import { taskAdd, taskDelete } from "@/slices/completedTaskSlice";
-import { taskAdd as inCompletedTaskAdd } from "@/slices/inCompletedTaskSlice";
+import { completedTaskDelete } from "@/slices/completedTaskSlice";
+import { inCompletedTaskAdd } from "@/slices/inCompletedTaskSlice";
 import { showTaskDetailContext } from "@/pages";
 
 import { useContext, useEffect } from "react";
@@ -33,7 +33,7 @@ const CompletedTaskList: React.FC = () => {
     // APIを経由してデータベースを更新
     await taskApi.switchIsCompleted(updateTask.id);
     // 完了タスクStateから削除
-    dispatch(taskDelete(updateTask));
+    dispatch(completedTaskDelete(updateTask));
     //タスク完了フラグをfalseにし、未完了タスクStateに追加
     updateTask = { ...updateTask, isComplete: false };
     dispatch(inCompletedTaskAdd(updateTask));

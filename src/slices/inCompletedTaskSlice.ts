@@ -15,7 +15,25 @@ export const inCompletedTaskItemsSlice = createSlice({
     inCompletedTaskAdd: (state, action) => {
       state.inCompletedTaskItems.push(action.payload);
     },
+    
     // タスク更新
+    inCompletedTaskUpdate: (state, action) => {
+      // action.payloadからidと更新するデータを取得
+      const { id, ...updatedData } = action.payload;
+
+      // 更新するタスクのインデックスを見つける
+      const index = state.inCompletedTaskItems.findIndex(
+        (task) => task.id === id
+      );
+
+      // インデックスが見つかった場合、そのタスクを更新
+      if (index !== -1) {
+        state.inCompletedTaskItems[index] = {
+          ...state.inCompletedTaskItems[index],
+          ...updatedData,
+        };
+      }
+    },
 
     // タスク削除
     inCompletedTaskDelete: (state, action) => {
@@ -27,5 +45,9 @@ export const inCompletedTaskItemsSlice = createSlice({
   },
 });
 
-export const { inCompletedTaskAdd, inCompletedTaskDelete } = inCompletedTaskItemsSlice.actions;
+export const {
+  inCompletedTaskAdd,
+  inCompletedTaskUpdate,
+  inCompletedTaskDelete,
+} = inCompletedTaskItemsSlice.actions;
 export default inCompletedTaskItemsSlice.reducer;

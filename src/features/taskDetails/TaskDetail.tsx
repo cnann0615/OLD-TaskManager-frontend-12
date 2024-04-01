@@ -1,6 +1,7 @@
 import { Category, TaskItem } from "@/@types";
 import { showTaskDetailContext } from "@/pages";
 import taskApi from "@/pages/api/task";
+import { inCompletedTaskUpdate } from "@/slices/inCompletedTaskSlice";
 import { useSelector } from "@/store/store";
 
 import React, { useState, useContext } from "react";
@@ -39,27 +40,33 @@ const TaskDetail = () => {
 
   // 編集内容を保存し、編集モードを終了する関数
   const saveEdit = async (field: string, value: any) => {
+    // 更新内容を一時的に保存するオブジェクト
+    let updatedDetail =  { ...showTaskDetail }; 
+
     // 編集対象がカテゴリの場合、選択されたカテゴリidに一致するカテゴリオブジェクトを取得
     if (field === "category") {
       const selectedCategory = categories.categories.find(
         (category) => category.id == value
       );
-      // Contextの更新（この例では簡単のため、Contextを直接更新しています）
-      setShowTaskDetail((prev) => ({ ...prev, [field]: selectedCategory }));
+      // 更新内容を一時的に保存するオブジェクト
+      updatedDetail = { ...showTaskDetail, [field]: selectedCategory };
       // 編集状態のトグル
-      toggleEdit(field);
     } else {
-      // Contextの更新（この例では簡単のため、Contextを直接更新しています）
-      setShowTaskDetail((prev) => ({ ...prev, [field]: value }));
-      // 編集状態のトグル
-      toggleEdit(field);  
-      console.log(showTaskDetail);
+      // 更新内容を一時的に保存するオブジェクト
+      updatedDetail = { ...showTaskDetail, [field]: value };
     }
-      // 未完了or完了タスクStateに保存
+
+    // Contextの更新
+    setShowTaskDetail(updatedDetail);
+    // 編集状態のトグル
+    toggleEdit(field);  
+    // 未完了or完了タスクStateに保存
+    dispatch(inCompletedTaskUpdate(updatedDetail));
 
 
     // APIを経由してデータベースに保存
-    await taskApi.updateTask(showTaskDetail);
+    await taskApi.updateTask(updatedDetail);
+
     
   };
 

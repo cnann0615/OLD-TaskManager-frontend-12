@@ -1,5 +1,5 @@
 import taskApi from "@/pages/api/task";
-import { inCompletedTaskAdd, inCompletedTaskDelete } from "@/slices/inCompletedTaskSlice";
+import { inCompletedTaskDelete } from "@/slices/inCompletedTaskSlice";
 import { completedTaskAdd } from "@/slices/completedTaskSlice";
 import { showTaskDetailContext } from "@/pages";
 
