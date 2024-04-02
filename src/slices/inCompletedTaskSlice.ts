@@ -15,7 +15,7 @@ export const inCompletedTaskItemsSlice = createSlice({
     inCompletedTaskAdd: (state, action) => {
       state.inCompletedTaskItems.push(action.payload);
     },
-    
+
     // タスク更新
     inCompletedTaskUpdate: (state, action) => {
       // action.payloadからidと更新するデータを取得

@@ -1,9 +1,14 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 
 import { useSelector } from "@/store/store";
 import { tabCategoryContext } from "./TaskList";
+import { useDispatch } from "react-redux";
+import { categoryDelete } from "@/slices/categorySlice";
+import { Category } from "@/@types";
 
 const ListTab: React.FC = () => {
+  const dispatch = useDispatch();
+
   // カテゴリStateを取得
   const categories = useSelector((state) => state.categories);
 
@@ -13,6 +18,17 @@ const ListTab: React.FC = () => {
   const switchTab = (id: number) => {
     setTabCategory(id);
   };
+
+// // カテゴリの削除
+//   const deleteCategory = (deleteCategory: Category) => {
+//     // 確認ポップアップを表示
+//     const isConfirmed = window.confirm('本当にこのカテゴリを削除しますか？');
+//     if (isConfirmed) {
+//       setTabCategory(0);
+//       dispatch(categoryDelete(deleteCategory));
+
+//     }
+//   }
 
   return (
     <div className="border-b border-gray-300">
@@ -33,7 +49,12 @@ const ListTab: React.FC = () => {
             tabCategory === category.id ? "font-bold" : ""
           }`}
         >
-          {category.name}
+          <div className="flex">
+          <p>{category.name}</p>
+          <p className="text-xs my-0 ml-3 opacity-50 hover:opacity-100">
+            ⛔️
+          </p>
+          </div>
         </button>
       ))}
     </div>

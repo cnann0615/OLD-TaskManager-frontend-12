@@ -77,7 +77,13 @@ const taskApi = {
   },
 
   // 削除
+  // タスク削除
   async taskDelete(taskItem: TaskItem) {
+    const result = await axios.delete(ENDPOINT_URL + "/task/" + taskItem.id);
+    return result.data;
+  },
+  // カテゴリ削除
+  async categoryDelete(taskItem: Category) {
     const result = await axios.delete(ENDPOINT_URL + "/task/" + taskItem.id);
     return result.data;
   },

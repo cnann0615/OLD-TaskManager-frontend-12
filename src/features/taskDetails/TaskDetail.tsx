@@ -1,12 +1,12 @@
 import { Category, TaskItem } from "@/@types";
 import { showTaskDetailContext } from "@/pages";
 import taskApi from "@/pages/api/task";
-import { inCompletedTaskUpdate } from "@/slices/inCompletedTaskSlice";
+import { completedTaskDelete } from "@/slices/completedTaskSlice";
+import { inCompletedTaskDelete, inCompletedTaskUpdate } from "@/slices/inCompletedTaskSlice";
 import { useSelector } from "@/store/store";
 
 import React, { useState, useContext } from "react";
 import { useDispatch } from "react-redux";
-import { classicNameResolver } from "typescript";
 
 // タスク詳細コンポーネント
 const TaskDetail = () => {
@@ -25,7 +25,7 @@ const TaskDetail = () => {
   // カテゴリStateを取得
   const categories = useSelector((state) => state.categories);
 
-  // 各項目の編集状態を管理するステート
+  // 各項目の編集状態を管理するState
   const [editing, setEditing] = useState({
     title: false,
     deadLine: false,
@@ -41,7 +41,7 @@ const TaskDetail = () => {
   // 編集内容を保存し、編集モードを終了する関数
   const saveEdit = async (field: string, value: any) => {
     // 更新内容を一時的に保存するオブジェクト
-    let updatedDetail =  { ...showTaskDetail }; 
+    let updatedDetail = { ...showTaskDetail };
 
     // 編集対象がカテゴリの場合、選択されたカテゴリidに一致するカテゴリオブジェクトを取得
     if (field === "category") {
@@ -59,19 +59,29 @@ const TaskDetail = () => {
     // Contextの更新
     setShowTaskDetail(updatedDetail);
     // 編集状態のトグル
-    toggleEdit(field);  
+    toggleEdit(field);
     // 未完了or完了タスクStateに保存
     dispatch(inCompletedTaskUpdate(updatedDetail));
 
-
     // APIを経由してデータベースに保存
     await taskApi.updateTask(updatedDetail);
-
-    
   };
 
+  // タスクの削除
+  const deleteTask = async() => {
+    // 確認ポップアップを表示
+    const isConfirmed = window.confirm('本当にこのタスクを削除しますか？');
+    if (isConfirmed) {
+      showTaskDetail.isComplete ?
+      dispatch(completedTaskDelete(showTaskDetail)) :
+      dispatch(inCompletedTaskDelete(showTaskDetail));
+      await taskApi.taskDelete(showTaskDetail);
+      setShowTaskDetail(null);
+    }
+  }
+
   return (
-    <div className="overflow-hidden border rounded-lg">
+    <><div className="overflow-hidden border rounded-lg">
       <table className="min-w-full leading-normal">
         <thead>
           <tr>
@@ -94,14 +104,11 @@ const TaskDetail = () => {
                 <input
                   type="text"
                   defaultValue={showTaskDetail.title}
-                  onBlur={(e: React.FocusEvent<HTMLInputElement>) =>
-                    saveEdit("title", e.target.value)
-                  }
+                  onBlur={(e: React.FocusEvent<HTMLInputElement>) => saveEdit("title", e.target.value)}
                   autoFocus
-                  className="rounded-md border-none focus:outline-none bg-gray-50 py-2 pl-1"
-                />
+                  className="rounded-md border-none focus:outline-none bg-gray-50 py-2 pl-1" />
               ) : (
-                <div onClick={() => toggleEdit("title")} className="pl-1" >
+                <div onClick={() => toggleEdit("title")} className="pl-1">
                   {showTaskDetail.title}
                 </div>
               )}
@@ -117,12 +124,9 @@ const TaskDetail = () => {
                 <input
                   type="date"
                   defaultValue={showTaskDetail.deadLine}
-                  onBlur={(e: React.FocusEvent<HTMLInputElement>) =>
-                    saveEdit("deadLine", e.target.value)
-                  }
+                  onBlur={(e: React.FocusEvent<HTMLInputElement>) => saveEdit("deadLine", e.target.value)}
                   autoFocus
-                  className="rounded-md border-gray-300 focus:outline-none bg-gray-50 py-2 pl-1"
-                />
+                  className="rounded-md border-gray-300 focus:outline-none bg-gray-50 py-2 pl-1" />
               ) : (
                 <div onClick={() => toggleEdit("deadLine")} className="pl-1">
                   {showTaskDetail.deadLine}
@@ -141,7 +145,7 @@ const TaskDetail = () => {
                   defaultValue={showTaskDetail.category.id}
                   onBlur={(e: React.FocusEvent<HTMLSelectElement, Element>) => {
                     saveEdit("category", e.target.value);
-                  }}
+                  } }
                   autoFocus
                   className="rounded-md border-gray-300 focus:outline-none bg-gray-50 py-2"
                 >
@@ -169,11 +173,13 @@ const TaskDetail = () => {
                   defaultValue={showTaskDetail.memo}
                   onBlur={(e: React.FocusEvent<HTMLTextAreaElement, Element>) => saveEdit("memo", e.target.value)}
                   autoFocus
-                  className="w-full h-80 rounded-md border-gray-300 focus:outline-none bg-gray-50"
-                />
+                  className="w-full h-80 rounded-md border-gray-300 focus:outline-none bg-gray-50" />
               ) : (
                 // \nを改行タグ(<br />)に変換して表示
-                <div onClick={() => toggleEdit("memo")} className="w-full h-80 rounded-md border-gray-300 focus:outline-none">
+                <div
+                  onClick={() => toggleEdit("memo")}
+                  className="w-full h-80 rounded-md border-gray-300 focus:outline-none"
+                >
                   {showTaskDetail.memo.split("\n").map((line, index) => (
                     <React.Fragment key={index}>
                       {line}
@@ -187,6 +193,13 @@ const TaskDetail = () => {
         </tbody>
       </table>
     </div>
+    <button
+      type="submit"
+      className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+      onClick={deleteTask}
+    >
+        削除
+      </button></>
   );
 };
 
