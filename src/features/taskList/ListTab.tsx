@@ -5,6 +5,7 @@ import { tabCategoryContext } from "./TaskList";
 import { useDispatch } from "react-redux";
 import { categoryDelete } from "@/slices/categorySlice";
 import { Category } from "@/@types";
+import { deleteAppClientCache } from "next/dist/server/lib/render-server";
 
 const ListTab: React.FC = () => {
   const dispatch = useDispatch();
@@ -19,16 +20,16 @@ const ListTab: React.FC = () => {
     setTabCategory(id);
   };
 
-// // カテゴリの削除
-//   const deleteCategory = (deleteCategory: Category) => {
-//     // 確認ポップアップを表示
-//     const isConfirmed = window.confirm('本当にこのカテゴリを削除しますか？');
-//     if (isConfirmed) {
-//       setTabCategory(0);
-//       dispatch(categoryDelete(deleteCategory));
-
-//     }
-//   }
+  // カテゴリの削除
+  const deleteCategory = () => {
+    // 確認ポップアップを表示
+    const isConfirmed = window.confirm("本当にこのカテゴリを削除しますか？");
+    if (isConfirmed) {
+      console.log("削除");
+      // setTabCategory(0);
+      // dispatch(categoryDelete(deleteCategory));
+    }
+  };
 
   return (
     <div className="border-b border-gray-300">
@@ -50,10 +51,13 @@ const ListTab: React.FC = () => {
           }`}
         >
           <div className="flex">
-          <p>{category.name}</p>
-          <p className="text-xs my-0 ml-3 opacity-50 hover:opacity-100">
-            ⛔️
-          </p>
+            <p>{category.name}</p>
+            <p
+              className="text-xs my-0 ml-3 opacity-50 hover:opacity-100"
+              onClick={deleteCategory}
+            >
+              ⛔️
+            </p>
           </div>
         </button>
       ))}

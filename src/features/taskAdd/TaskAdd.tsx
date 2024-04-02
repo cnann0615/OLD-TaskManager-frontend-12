@@ -61,61 +61,66 @@ const TaskAdd: React.FC = () => {
     return (
       <div>
         <h3 className="font-bold">タスク作成</h3>
-      <form onSubmit={handleSubmit(onSubmit)} className="mx-auto mt-4 mb-10 p-4 border rounded-lg shadow">
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
-            タイトル：
-            <input
-              type="text"
-              {...register("title", { required: "タイトルは必須です。" })}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-            <p className="text-red-500 text-xs italic">{errors.title?.message as React.ReactNode}</p>
-          </label>
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
-            期日：
-            <input
-              type="date"
-              {...register("deadLine")}
-              className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </label>
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
-            カテゴリ：
-            <select
-              {...register("category")}
-              className="block appearance-none w-full bg-white border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="mx-auto mt-4 mb-10 p-4 border rounded-lg shadow"
+        >
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2">
+              タイトル：
+              <input
+                type="text"
+                {...register("title", { required: "タイトルは必須です。" })}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+              <p className="text-red-500 text-xs italic">
+                {errors.title?.message as React.ReactNode}
+              </p>
+            </label>
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2">
+              期日：
+              <input
+                type="date"
+                {...register("deadLine")}
+                className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </label>
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2">
+              カテゴリ：
+              <select
+                {...register("category")}
+                className="block appearance-none w-full bg-white border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+              >
+                {categories.categories.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2">
+              メモ：
+              <textarea
+                {...register("memo")}
+                className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              ></textarea>
+            </label>
+          </div>
+          <div className="flex items-center justify-between">
+            <button
+              type="submit"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             >
-              {categories.categories.map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
-            メモ：
-            <textarea
-              {...register("memo")}
-              className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            ></textarea>
-          </label>
-        </div>
-        <div className="flex items-center justify-between">
-          <button
-            type="submit"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          >
-            追加
-          </button>
-        </div>
-      </form>
+              追加
+            </button>
+          </div>
+        </form>
       </div>
     );
   }
