@@ -19,12 +19,6 @@ const TaskDetail = () => {
     showTaskDetailContext
   );
 
-  // 未完了タスクStateを取得
-  const inCompletedTaskItems = useSelector(
-    (state) => state.inCompletedTaskItems
-  );
-  // 完了タスクStateを取得
-  const completedTaskItems = useSelector((state) => state.completedTaskItems);
   // カテゴリStateを取得
   const categories = useSelector((state) => state.categories);
 
@@ -66,7 +60,7 @@ const TaskDetail = () => {
     // 未完了or完了タスクStateに保存
     dispatch(inCompletedTaskUpdate(updatedDetail));
 
-    // APIを経由してデータベースに保存
+    // APIを経由してデータベースに保存（更新）
     await taskApi.updateTask(updatedDetail);
   };
 

@@ -31,11 +31,9 @@ const taskApi = {
     const result = await axios.get(ENDPOINT_URL + "/inCompletedTask");
     return result.data;
   },
-  // 未完了タスクをカテゴリIDから取得
-  async inCompletedTaskGetByCategoryId(categoryId: number) {
-    const result = await axios.get(
-      ENDPOINT_URL + "/inCompletedTask/" + categoryId
-    );
+  // タスクをカテゴリIDから取得
+  async taskGetByCategoryId(categoryId: number) {
+    const result = await axios.get(ENDPOINT_URL + "/task/" + categoryId);
     return result.data;
   },
   // 完了タスク取得
@@ -83,8 +81,11 @@ const taskApi = {
     return result.data;
   },
   // カテゴリ削除
-  async categoryDelete(taskItem: Category) {
-    const result = await axios.delete(ENDPOINT_URL + "/task/" + taskItem.id);
+  async categoryDelete(category: Category) {
+    console.log(category.id);
+    const result = await axios.delete(
+      ENDPOINT_URL + "/category/" + category.id
+    );
     return result.data;
   },
 
@@ -97,6 +98,10 @@ const taskApi = {
   async updateTask(taskItem: TaskItem) {
     await axios.put(ENDPOINT_URL + "/updateTask", taskItem);
   },
+  // カテゴリの編集
+  async updateCategory(category: Category) {
+    await axios.put(ENDPOINT_URL + "/updateCategory", category);
+  }
 };
 
 export default taskApi;
