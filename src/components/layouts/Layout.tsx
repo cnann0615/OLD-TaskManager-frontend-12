@@ -1,4 +1,4 @@
-// components/Layout.tsx
+// 共通のレイアウトを実装///////////////////////////////////
 import { ReactNode } from 'react';
 
 type LayoutProps = {
@@ -10,7 +10,10 @@ const Layout = ({ children }: LayoutProps) => {
     <>
       <header className="bg-blue-500 text-white text-xl py-4 px-8 font-bold">
         Task Manager
-      </header><div className="m-20">{children}</div>
+      </header>
+      <div className="m-20">
+        {children}
+      </div>
     </>
     )
 };

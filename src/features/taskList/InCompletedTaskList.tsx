@@ -3,7 +3,7 @@ import { inCompletedTaskDelete } from "@/slices/inCompletedTaskSlice";
 import { completedTaskAdd } from "@/slices/completedTaskSlice";
 import { showTaskDetailContext } from "@/pages";
 
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { useDispatch } from "react-redux";
 
 import { useSelector } from "@/store/store";
@@ -13,7 +13,6 @@ import { TaskItem } from "@/@types";
 // 未完了タスクリスト
 const InCompletedTaskList: React.FC = () => {
   const dispatch = useDispatch();
-
 
   // 未完了タスクStateを取得
   const inCompletedTaskItems = useSelector(
@@ -34,13 +33,14 @@ const InCompletedTaskList: React.FC = () => {
 
   // タスク完了処理（buttonのonClick時に発火）
   const switchCompleted = async (updateTask: TaskItem) => {
-    // APIを経由してデータベースを更新
-    await taskApi.switchIsCompleted(updateTask.id);
     // 未完了タスクStateから削除
     dispatch(inCompletedTaskDelete(updateTask));
-    //タスク完了フラグをtrueにし、完了タスクStateに追加
-    updateTask = { ...updateTask, isComplete: true };
-    dispatch(completedTaskAdd(updateTask));
+    //タスク完了フラグを反転
+    const _updateTask = { ...updateTask, completed: true };
+    // 完了タスクStateに追加
+    dispatch(completedTaskAdd(_updateTask));
+    // APIを経由してデータベースを更新
+    await taskApi.updateTask(_updateTask);
   };
 
   // タスク詳細表示処理（タイトルのonClick時に発火）
@@ -79,7 +79,9 @@ const InCompletedTaskList: React.FC = () => {
                 {filteredInCompletedTaskItem.title}
               </td>
               <td className="border px-4 py-2 w-32 text-center">
-                {filteredInCompletedTaskItem.deadLine? filteredInCompletedTaskItem.deadLine : "なし"}
+                {filteredInCompletedTaskItem.deadLine
+                  ? filteredInCompletedTaskItem.deadLine
+                  : "なし"}
               </td>
             </tr>
           ))}

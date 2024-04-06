@@ -1,12 +1,13 @@
 import { Category } from "@/@types";
 import { createSlice } from "@reduxjs/toolkit";
 
-// カテゴリを管理するスライスの初期状態
+// カテゴリState///////////////////////////////////////////////////////////
+
+// 初期値
 const initialState: { categories: Category[] } = {
   categories: [],
 };
 
-// カテゴリを管理
 export const categoriesSlice = createSlice({
   name: "categories",
   initialState,
@@ -15,16 +16,15 @@ export const categoriesSlice = createSlice({
     categoryAdd: (state, action) => {
       state.categories.push(action.payload);
     },
+
     // カテゴリ更新
     categoryUpdate: (state, action) => {
       // action.payloadからidと更新するデータを取得
       const { id, ...updatedData } = action.payload;
-
       // 更新するタスクのインデックスを見つける
       const index = state.categories.findIndex(
         (category) => category.id === id
       );
-
       // インデックスが見つかった場合、そのタスクを更新
       if (index !== -1) {
         state.categories[index] = {
@@ -44,5 +44,6 @@ export const categoriesSlice = createSlice({
   },
 });
 
-export const { categoryAdd, categoryUpdate, categoryDelete } = categoriesSlice.actions;
+export const { categoryAdd, categoryUpdate, categoryDelete } =
+  categoriesSlice.actions;
 export default categoriesSlice.reducer;

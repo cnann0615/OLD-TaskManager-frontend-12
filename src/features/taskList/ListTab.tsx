@@ -1,5 +1,3 @@
-import { useContext, useState } from "react";
-
 import { useSelector } from "@/store/store";
 import { tabCategoryContext } from "./TaskList";
 import { useDispatch } from "react-redux";
@@ -10,11 +8,11 @@ import { showTaskDetailContext } from "@/pages";
 import { inCompletedTaskUpdateCategory } from "@/slices/inCompletedTaskSlice";
 import { completedTaskUpdateCategory } from "@/slices/completedTaskSlice";
 
+import { useContext, useState } from "react";
+
+// カテゴリのタブリスト
 const ListTab: React.FC = () => {
   const dispatch = useDispatch();
-  const { showTaskDetail, setShowTaskDetail } = useContext(
-    showTaskDetailContext
-  );
 
   // カテゴリStateを取得
   const categories = useSelector((state) => state.categories);
@@ -22,34 +20,46 @@ const ListTab: React.FC = () => {
   // タブカテゴリ管理State
   const { tabCategory, setTabCategory } = useContext(tabCategoryContext);
 
-  // 編集中のカテゴリIDとカテゴリ名を保持するためのState
-  const [editCategoryId, setEditCategoryId] = useState<number | null>(null);
-  const [editCategoryName, setEditCategoryName] = useState("");
-
+  // タブクリック時にタブカテゴリにセットする
   const switchTab = (id: number) => {
     setTabCategory(id);
   };
 
-  // 編集モードを開始し、選択したカテゴリのIDと名前をStateにセット
+  // カテゴリ名編集関連//////////////////
+
+  // タブからカテゴリ名を変更した際に使用する、詳細表示タスクStateの値と更新用関数を定義
+  const { showTaskDetail, setShowTaskDetail } = useContext(
+    showTaskDetailContext
+  );
+
+  // 編集中のカテゴリIDとカテゴリ名を保持するためのState
+  const [editCategoryId, setEditCategoryId] = useState<number | null>(null);
+  const [editCategoryName, setEditCategoryName] = useState("");
+
+  // カテゴリ名変更ボタン押下時に、対象のカテゴリのIDと名前をStateにセット
   const editCategory = (category: Category) => {
     setEditCategoryId(category.id);
     setEditCategoryName(category.name);
   };
 
-  // 編集内容を確定し、Stateを更新
-  const commitEdit = async() => {
+  // 編集内容を確定し、Stateを更新（対象のカテゴリからカーソルが離れた時）
+  const commitEdit = async () => {
     // カテゴリStateの更新
     const updateCategory = {
       id: editCategoryId,
-      name: editCategoryName
-    }
+      name: editCategoryName,
+    };
     dispatch(categoryUpdate(updateCategory));
 
     // 詳細表示されているタスクのカテゴリを動的に更新
-    if (showTaskDetail){
-      let updateShowTaskDetail = {...showTaskDetail};
+    if (showTaskDetail) {
+      let updateShowTaskDetail = { ...showTaskDetail };
+      // 更新したカテゴリが詳細表示対象のタスクのカテゴリだった場合、カテゴリ名を動的に更新する
       if (showTaskDetail.category.id === updateCategory.id) {
-        updateShowTaskDetail = { ...showTaskDetail, category: {id: updateCategory.id, name: updateCategory.name}}
+        updateShowTaskDetail = {
+          ...showTaskDetail,
+          category: { id: updateCategory.id, name: updateCategory.name },
+        };
       }
       setShowTaskDetail(updateShowTaskDetail);
     }
@@ -62,6 +72,7 @@ const ListTab: React.FC = () => {
 
     // APIを経由してデータベースに保存（更新）
     await taskApi.updateCategory(updateCategory);
+
     // 編集状態をクリア
     setEditCategoryId(null);
   };

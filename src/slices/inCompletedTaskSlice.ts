@@ -1,12 +1,13 @@
 import { TaskItem } from "@/@types";
 import { createSlice } from "@reduxjs/toolkit";
 
-// カテゴリを管理するスライスの初期状態
+// 未完了タスクState////////////////////////////////////////////////////////////////////
+
+// 初期値
 const initialState: { inCompletedTaskItems: TaskItem[] } = {
   inCompletedTaskItems: [],
 };
 
-// 未完了タスクを管理
 export const inCompletedTaskItemsSlice = createSlice({
   name: "inCompletedTaskItems",
   initialState,
@@ -20,12 +21,10 @@ export const inCompletedTaskItemsSlice = createSlice({
     inCompletedTaskUpdate: (state, action) => {
       // action.payloadからidと更新するデータを取得
       const { id, ...updatedData } = action.payload;
-
       // 更新するタスクのインデックスを見つける
       const index = state.inCompletedTaskItems.findIndex(
-        (task) => task.id === id
+        (inCompletedTaskItem) => inCompletedTaskItem.id === id
       );
-
       // インデックスが見つかった場合、そのタスクを更新
       if (index !== -1) {
         state.inCompletedTaskItems[index] = {
@@ -34,10 +33,11 @@ export const inCompletedTaskItemsSlice = createSlice({
         };
       }
     },
-    // 特定のタスクのカテゴリ名を更新
+
+    // タスクのカテゴリ名を更新（特定のカテゴリが割り当てられているものを一括して更新）
     inCompletedTaskUpdateCategory: (state, action) => {
       const updateCategory = action.payload;
-      state.inCompletedTaskItems.forEach(inCompletedTaskItem => {
+      state.inCompletedTaskItems.forEach((inCompletedTaskItem) => {
         if (inCompletedTaskItem.category.id === updateCategory.id) {
           inCompletedTaskItem.category.name = updateCategory.name;
         }
@@ -60,4 +60,5 @@ export const {
   inCompletedTaskUpdateCategory,
   inCompletedTaskDelete,
 } = inCompletedTaskItemsSlice.actions;
+
 export default inCompletedTaskItemsSlice.reducer;

@@ -1,4 +1,3 @@
-import { Category, TaskItem } from "@/@types";
 import { showTaskDetailContext } from "@/pages";
 import taskApi from "@/pages/api/task";
 import { completedTaskDelete } from "@/slices/completedTaskSlice";
@@ -15,6 +14,7 @@ import { useDispatch } from "react-redux";
 const TaskDetail = () => {
   const dispatch = useDispatch();
 
+  // 詳細表示タスクStateを定義
   const { showTaskDetail, setShowTaskDetail } = useContext(
     showTaskDetailContext
   );
@@ -59,7 +59,6 @@ const TaskDetail = () => {
     toggleEdit(field);
     // 未完了or完了タスクStateに保存
     dispatch(inCompletedTaskUpdate(updatedDetail));
-
     // APIを経由してデータベースに保存（更新）
     await taskApi.updateTask(updatedDetail);
   };
@@ -68,10 +67,13 @@ const TaskDetail = () => {
   const deleteTask = async () => {
     // 確認ポップアップを表示
     const isConfirmed = window.confirm("本当にこのタスクを削除しますか？");
+    // 上記ポップアップへのアクションがYesの場合
     if (isConfirmed) {
+      // 完了フラグに応じて、完了タスクState or 未完了タスクStateから、対象のタスクを削除
       showTaskDetail.isComplete
         ? dispatch(completedTaskDelete(showTaskDetail))
         : dispatch(inCompletedTaskDelete(showTaskDetail));
+      // APIを経由してデータベースから削除
       await taskApi.taskDelete(showTaskDetail);
       setShowTaskDetail(null);
     }
@@ -133,7 +135,7 @@ const TaskDetail = () => {
                   />
                 ) : (
                   <div onClick={() => toggleEdit("deadLine")} className="pl-1">
-                    {showTaskDetail.deadLine? showTaskDetail.deadLine : "なし"}
+                    {showTaskDetail.deadLine ? showTaskDetail.deadLine : "なし"}
                   </div>
                 )}
               </td>

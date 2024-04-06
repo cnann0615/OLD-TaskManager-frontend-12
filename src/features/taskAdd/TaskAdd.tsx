@@ -19,6 +19,7 @@ const TaskAdd: React.FC = () => {
   const categories = useSelector((state) => state.categories);
 
   // APIを経由してデータベースからカテゴリを取得し、カテゴリStateに反映
+  //isLoadingを使用したい都合上、index.tsxのuseEffectにまとめられていない。
   useEffect(() => {
     (async () => {
       const categories: Category[] = await taskApi.categoryGetAll();
@@ -27,7 +28,7 @@ const TaskAdd: React.FC = () => {
     })();
   }, []);
 
-  // フォーム入力値をStateで管理(categoryは文字列型)
+  // useFormを利用したフォームの処理
   const {
     register,
     handleSubmit,

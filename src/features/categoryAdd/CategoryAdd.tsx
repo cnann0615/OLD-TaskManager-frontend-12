@@ -9,7 +9,7 @@ import { useDispatch } from "react-redux";
 const CategoryAdd: React.FC = () => {
   const dispatch = useDispatch();
 
-  // フォームの処理
+  // useFormを使用したフォームの処理///////////
   const {
     register,
     handleSubmit,
@@ -20,7 +20,7 @@ const CategoryAdd: React.FC = () => {
   const onSubmit = async (category: Category) => {
     // 新しいカテゴリオブジェクトを作成
     const newCategory: Category = { name: category.name };
-    // 新しいカテゴリをAPI経由でデータベースに追加
+    // 新しいカテゴリをAPI経由でデータベースに追加し、結果を取得（カテゴリ名が既存のカテゴリと重複した場合、nullが返させる。）
     const categoryAddSuccess: Category = await taskApi.categoryAdd(newCategory);
     // カテゴリ名が重複せず追加された場合のみ処理を行う。（重複した場合、nullが返されるため以下の処理は行われない。）
     categoryAddSuccess &&

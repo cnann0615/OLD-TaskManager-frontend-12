@@ -1,26 +1,14 @@
-// POINT axiosを用いたAPI
+// axiosを用いたAPI//////////////////////////////////////////////////////////////
 import axios from "axios";
+
+import { TaskItem, Category } from "@/@types";
 
 const ENDPOINT_URL = "http://localhost:8080/taskAPI";
 
-//型定義
-// カテゴリ
-type Category = {
-  id?: number;
-  name: string;
-};
-// 完了タスク
-type TaskItem = {
-  id?: number;
-  title: string;
-  deadLine: string;
-  category: Category;
-  memo: string;
-  isComplete: boolean;
-};
-
 const taskApi = {
-  // 取得
+  // 取得////////////////////////////////
+
+  // タスク取得///////////////
   // 全タスク取得
   async taskGetAll() {
     const result = await axios.get(ENDPOINT_URL + "/task");
@@ -31,14 +19,14 @@ const taskApi = {
     const result = await axios.get(ENDPOINT_URL + "/inCompletedTask");
     return result.data;
   },
-  // タスクをカテゴリIDから取得
-  async taskGetByCategoryId(categoryId: number) {
-    const result = await axios.get(ENDPOINT_URL + "/task/" + categoryId);
-    return result.data;
-  },
   // 完了タスク取得
   async completedTaskGet() {
     const result = await axios.get(ENDPOINT_URL + "/completedTask");
+    return result.data;
+  },
+  // タスクをカテゴリIDから取得
+  async taskGetByCategoryId(categoryId: number) {
+    const result = await axios.get(ENDPOINT_URL + "/task/" + categoryId);
     return result.data;
   },
   // 最新のタスク取得
@@ -46,6 +34,7 @@ const taskApi = {
     const result = await axios.get(ENDPOINT_URL + "/latestTask");
     return result.data;
   },
+  // カテゴリ取得///////////////
   // 全カテゴリ取得
   async categoryGetAll() {
     const result = await axios.get(ENDPOINT_URL + "/category");
@@ -62,25 +51,33 @@ const taskApi = {
     return result.data;
   },
 
-  // 追加
-  // タスク追加
+  // 追加////////////////////////////////
+
+  // タスク追加/////////////////
+  // タスク（１件）追加
   async taskAdd(taskItem: TaskItem) {
     const result = await axios.post(ENDPOINT_URL + "/task", taskItem);
     return result.data;
   },
-  // カテゴリ追加（カテゴリ名が重複した場合は、nullを返す。）
+
+  // カテゴリ追加////////////////
+  // カテゴリ（１件）追加　→　カテゴリ名が重複した場合は、nullを返す。
   async categoryAdd(category: Category) {
     const result = await axios.post(ENDPOINT_URL + "/category", category);
     return result.data;
   },
 
-  // 削除
-  // タスク削除
+  // 削除////////////////////////////////
+
+  // タスク削除////////////////
+  // タスク（１件）削除
   async taskDelete(taskItem: TaskItem) {
     const result = await axios.delete(ENDPOINT_URL + "/task/" + taskItem.id);
     return result.data;
   },
-  // カテゴリ削除
+
+  // カテゴリ削除//////////////
+  // カテゴリ（１件）削除
   async categoryDelete(category: Category) {
     console.log(category.id);
     const result = await axios.delete(
@@ -89,19 +86,20 @@ const taskApi = {
     return result.data;
   },
 
-  // 更新
-  // タスク完了フラグ切り替え
-  async switchIsCompleted(id: number) {
-    await axios.put(ENDPOINT_URL + "/switchIsCompleted/" + id);
-  },
-  // 詳細表示画面からの編集
+  // 更新//////////////////////////////////
+
+  // タスク更新////////////////
+  // タスク（１件）更新
   async updateTask(taskItem: TaskItem) {
+    console.log(taskItem);
     await axios.put(ENDPOINT_URL + "/updateTask", taskItem);
   },
-  // カテゴリの編集
+
+  // カテゴリ更新//////////////
+  // カテゴリ（１件）更新
   async updateCategory(category: Category) {
     await axios.put(ENDPOINT_URL + "/updateCategory", category);
-  }
+  },
 };
 
 export default taskApi;

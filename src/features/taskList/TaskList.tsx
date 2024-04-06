@@ -14,7 +14,7 @@ type TabCategory = {
   setTabCategory: Dispatch<SetStateAction<number>>;
 };
 
-// 現在のタブカテゴリを管理するStateを作成
+// 現在のタブカテゴリをコンポーネントを跨いで管理するためにcreateContextを使用
 export const tabCategoryContext = createContext<TabCategory>({
   tabCategory: 0,
   setTabCategory: () => {}, // この関数はダミー。実際にはuseStateによって提供される関数に置き換わる。
