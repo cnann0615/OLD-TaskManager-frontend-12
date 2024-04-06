@@ -75,7 +75,7 @@ const CompletedTaskList: React.FC = () => {
                 {filteredCompletedTaskItem.title}
               </td>
               <td className="border px-4 py-2">
-                {filteredCompletedTaskItem.deadLine}
+                {filteredCompletedTaskItem.deadLine? filteredCompletedTaskItem.deadLine : "なし"}
               </td>
             </tr>
           ))}

@@ -79,7 +79,7 @@ const InCompletedTaskList: React.FC = () => {
                 {filteredInCompletedTaskItem.title}
               </td>
               <td className="border px-4 py-2 w-32 text-center">
-                {filteredInCompletedTaskItem.deadLine}
+                {filteredInCompletedTaskItem.deadLine? filteredInCompletedTaskItem.deadLine : "なし"}
               </td>
             </tr>
           ))}

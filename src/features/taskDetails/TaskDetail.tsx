@@ -133,7 +133,7 @@ const TaskDetail = () => {
                   />
                 ) : (
                   <div onClick={() => toggleEdit("deadLine")} className="pl-1">
-                    {showTaskDetail.deadLine}
+                    {showTaskDetail.deadLine? showTaskDetail.deadLine : "なし"}
                   </div>
                 )}
               </td>
