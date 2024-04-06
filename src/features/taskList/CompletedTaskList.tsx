@@ -69,7 +69,7 @@ const CompletedTaskList: React.FC = () => {
                 </button>
               </td>
               <td
-                className="border px-4 py-2 cursor-pointer hover:bg-gray-100"
+                className="border px-4 py-2 cursor-pointer hover:bg-gray-100 line-through"
                 onClick={() => openTaskDetail(filteredCompletedTaskItem)}
               >
                 {filteredCompletedTaskItem.title}

@@ -34,6 +34,15 @@ export const inCompletedTaskItemsSlice = createSlice({
         };
       }
     },
+    // 特定のタスクのカテゴリ名を更新
+    inCompletedTaskUpdateCategory: (state, action) => {
+      const updateCategory = action.payload;
+      state.inCompletedTaskItems.forEach(inCompletedTaskItem => {
+        if (inCompletedTaskItem.category.id === updateCategory.id) {
+          inCompletedTaskItem.category.name = updateCategory.name;
+        }
+      });
+    },
 
     // タスク削除
     inCompletedTaskDelete: (state, action) => {
@@ -48,6 +57,7 @@ export const inCompletedTaskItemsSlice = createSlice({
 export const {
   inCompletedTaskAdd,
   inCompletedTaskUpdate,
+  inCompletedTaskUpdateCategory,
   inCompletedTaskDelete,
 } = inCompletedTaskItemsSlice.actions;
 export default inCompletedTaskItemsSlice.reducer;

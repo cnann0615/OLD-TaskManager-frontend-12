@@ -8,8 +8,8 @@ type LayoutProps = {
 const Layout = ({ children }: LayoutProps) => {
   return (
     <>
-      <header className="bg-blue-500 text-white text-lg py-4 px-8 font-bold">
-        Todo Manager
+      <header className="bg-blue-500 text-white text-xl py-4 px-8 font-bold">
+        Task Manager
       </header><div className="m-20">{children}</div>
     </>
     )

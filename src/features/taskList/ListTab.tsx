@@ -7,9 +7,14 @@ import { Category } from "@/@types";
 import { categoryUpdate } from "@/slices/categorySlice";
 import taskApi from "@/pages/api/task";
 import { showTaskDetailContext } from "@/pages";
+import { inCompletedTaskUpdateCategory } from "@/slices/inCompletedTaskSlice";
+import { completedTaskUpdateCategory } from "@/slices/completedTaskSlice";
 
 const ListTab: React.FC = () => {
   const dispatch = useDispatch();
+  const { showTaskDetail, setShowTaskDetail } = useContext(
+    showTaskDetailContext
+  );
 
   // カテゴリStateを取得
   const categories = useSelector((state) => state.categories);
@@ -31,7 +36,7 @@ const ListTab: React.FC = () => {
     setEditCategoryName(category.name);
   };
 
-  // 編集内容を確定し、Stateを更新（ここでAPI呼び出し等の更新処理を実装）
+  // 編集内容を確定し、Stateを更新
   const commitEdit = async() => {
     // カテゴリStateの更新
     const updateCategory = {
@@ -40,13 +45,20 @@ const ListTab: React.FC = () => {
     }
     dispatch(categoryUpdate(updateCategory));
 
-    // // 詳細表示されているタスクのカテゴリを動的に更新
-    // const { showTaskDetail, setShowTaskDetail } = useContext(
-    //   showTaskDetailContext
-    // );
-    // if (showTaskDetail.category.id === updateCategory.id) {
-    //   setShowTaskDetail((prev) => ({...prev, name: updateCategory.name}))
-    // }
+    // 詳細表示されているタスクのカテゴリを動的に更新
+    if (showTaskDetail){
+      let updateShowTaskDetail = {...showTaskDetail};
+      if (showTaskDetail.category.id === updateCategory.id) {
+        updateShowTaskDetail = { ...showTaskDetail, category: {id: updateCategory.id, name: updateCategory.name}}
+      }
+      setShowTaskDetail(updateShowTaskDetail);
+    }
+
+    // 未完了タスクStateのカテゴリを動的に更新
+    dispatch(inCompletedTaskUpdateCategory(updateCategory));
+
+    // 完了タスクStateのカテゴリを動的に更新
+    dispatch(completedTaskUpdateCategory(updateCategory));
 
     // APIを経由してデータベースに保存（更新）
     await taskApi.updateCategory(updateCategory);
