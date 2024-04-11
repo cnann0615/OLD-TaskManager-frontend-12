@@ -3,7 +3,7 @@ import axios from "axios";
 
 import { TaskItem, Category } from "@/@types";
 
-const ENDPOINT_URL = "http://localhost:8080/taskAPI";
+const ENDPOINT_URL = "http://3.113.7.142:8080/taskAPI";
 
 const taskApi = {
   // 取得////////////////////////////////
