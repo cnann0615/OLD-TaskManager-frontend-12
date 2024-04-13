@@ -47,7 +47,7 @@ const TaskAdd: React.FC = () => {
       deadLine: taskItem.deadLine,
       category: category,
       memo: taskItem.memo,
-      isComplete: false,
+      isCompleted: false,
     };
     // 新しいタスクをAPI経由でデータベースに追加
     await taskApi.taskAdd(newTask);

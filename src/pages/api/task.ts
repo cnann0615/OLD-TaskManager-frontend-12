@@ -3,7 +3,7 @@ import axios from "axios";
 
 import { TaskItem, Category } from "@/@types";
 
-const ENDPOINT_URL = "http://3.113.7.142:8080/taskAPI";
+const ENDPOINT_URL = "http://localhost:8080/taskAPI";
 
 const taskApi = {
   // 取得////////////////////////////////
@@ -17,6 +17,7 @@ const taskApi = {
   // 未完了タスク取得
   async inCompletedTaskGet() {
     const result = await axios.get(ENDPOINT_URL + "/inCompletedTask");
+    console.log(result.data);
     return result.data;
   },
   // 完了タスク取得
@@ -91,7 +92,6 @@ const taskApi = {
   // タスク更新////////////////
   // タスク（１件）更新
   async updateTask(taskItem: TaskItem) {
-    console.log(taskItem);
     await axios.put(ENDPOINT_URL + "/updateTask", taskItem);
   },
 

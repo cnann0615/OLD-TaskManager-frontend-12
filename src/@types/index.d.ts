@@ -10,7 +10,7 @@ export interface TaskItem {
   deadLine: string;
   category: Category;
   memo: string;
-  isComplete: boolean;
+  isCompleted: boolean;
 }
 
 // form入力時のタスク型
@@ -19,5 +19,5 @@ export interface inputTaskItem {
   deadLine: "";
   category: "";
   memo: "";
-  isComplete: false;
+  isCompleted: false;
 }

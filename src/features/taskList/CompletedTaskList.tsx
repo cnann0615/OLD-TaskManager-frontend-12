@@ -32,7 +32,7 @@ const CompletedTaskList: React.FC = () => {
     // 完了タスクStateから削除
     dispatch(completedTaskDelete(updateTask));
     //タスク完了フラグを反転
-    const _updateTask = { ...updateTask, completed: false };
+    const _updateTask = { ...updateTask, isCompleted: false };
     // 完了タスクStateに追加
     dispatch(inCompletedTaskAdd(_updateTask));
     // APIを経由してデータベースを更新

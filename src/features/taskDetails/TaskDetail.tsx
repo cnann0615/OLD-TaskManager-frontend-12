@@ -1,6 +1,6 @@
 import { showTaskDetailContext } from "@/pages";
 import taskApi from "@/pages/api/task";
-import { completedTaskDelete } from "@/slices/completedTaskSlice";
+import { completedTaskDelete, completedTaskUpdate } from "@/slices/completedTaskSlice";
 import {
   inCompletedTaskDelete,
   inCompletedTaskUpdate,
@@ -52,12 +52,12 @@ const TaskDetail = () => {
       // 更新内容を一時的に保存するオブジェクト
       updatedDetail = { ...showTaskDetail, [field]: value };
     }
-
     // Contextの更新
     setShowTaskDetail(updatedDetail);
     // 編集状態のトグル
     toggleEdit(field);
     // 未完了or完了タスクStateに保存
+    dispatch(completedTaskUpdate(updatedDetail));
     dispatch(inCompletedTaskUpdate(updatedDetail));
     // APIを経由してデータベースに保存（更新）
     await taskApi.updateTask(updatedDetail);
@@ -70,7 +70,7 @@ const TaskDetail = () => {
     // 上記ポップアップへのアクションがYesの場合
     if (isConfirmed) {
       // 完了フラグに応じて、完了タスクState or 未完了タスクStateから、対象のタスクを削除
-      showTaskDetail.isComplete
+      showTaskDetail.isCompleted
         ? dispatch(completedTaskDelete(showTaskDetail))
         : dispatch(inCompletedTaskDelete(showTaskDetail));
       // APIを経由してデータベースから削除
