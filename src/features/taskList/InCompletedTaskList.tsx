@@ -33,7 +33,7 @@ const InCompletedTaskList: React.FC = () => {
   // タスク完了処理（buttonのonClick時に発火）
   const switchCompleted = async (updateTask: TaskItem) => {
     dispatch(inCompletedTaskDelete(updateTask));
-    const _updateTask = { ...updateTask, isCompleted: true };
+    const _updateTask = { ...updateTask, completed: true };
     dispatch(completedTaskAdd(_updateTask));
     await taskApi.updateTask(_updateTask);
   };
@@ -48,7 +48,7 @@ const InCompletedTaskList: React.FC = () => {
     <div className="mt-4">
       <h2 className="text-xl font-bold mb-2">未完了タスク</h2>
       <DragDropContext onDragEnd={() => {}}>
-        <Droppable droppableId="incompleteTasks">
+        <Droppable droppableId="inCompleteTasks">
           {(provided, snapshot) => (
             <ul className="list-none w-full" {...provided.droppableProps} ref={provided.innerRef}>
               {filteredInCompletedTaskItems.length == 0 ? <div className="text-gray-500">未完了タスクはありません。</div> : ""}
@@ -63,7 +63,7 @@ const InCompletedTaskList: React.FC = () => {
                     >
                       <button
                         onClick={() => switchCompleted(task)}
-                        className="text-xl text-blue-500 hover:text-blue-700"
+                        className="text-xl text-blue-500 hover:text-blue-700 font-bold"
                       >
                         ◻︎
                       </button>

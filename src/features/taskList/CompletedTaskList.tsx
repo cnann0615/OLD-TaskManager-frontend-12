@@ -30,7 +30,7 @@ const CompletedTaskList: React.FC = () => {
   // タスク未完了処理
   const switchInCompleted = async (updateTask: TaskItem) => {
     dispatch(completedTaskDelete(updateTask));
-    const _updateTask = { ...updateTask, isCompleted: false };
+    const _updateTask = { ...updateTask, completed: false };
     dispatch(inCompletedTaskAdd(_updateTask));
     await taskApi.updateTask(_updateTask);
   };

@@ -17,7 +17,6 @@ const taskApi = {
   // 未完了タスク取得
   async inCompletedTaskGet() {
     const result = await axios.get(ENDPOINT_URL + "/inCompletedTask");
-    console.log(result.data);
     return result.data;
   },
   // 完了タスク取得
