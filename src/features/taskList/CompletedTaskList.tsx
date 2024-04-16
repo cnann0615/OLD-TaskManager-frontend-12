@@ -47,43 +47,38 @@ const CompletedTaskList: React.FC = () => {
       <DragDropContext onDragEnd={() => {}}>
         <Droppable droppableId="completedTasks">
           {(provided) => (
-            <table className="table-auto w-full" {...provided.droppableProps} ref={provided.innerRef}>
-              <thead>
-                <tr className="bg-gray-200">
-                  <th className="px-4 py-2 w-12 text-center">Check</th>
-                  <th className="px-4 py-2">タイトル</th>
-                  <th className="px-4 py-2 w-32">期日</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredCompletedTaskItems.map((task, index) => (
-                  <Draggable key={task.id} draggableId={task.id.toString()} index={index}>
-                    {(provided) => (
-                      <tr {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef} className="bg-white">
-                        <td className="border px-4 py-2 text-center">
-                          <button
-                            onClick={() => switchInCompleted(task)}
-                            className="text-blue-500 hover:text-blue-700"
-                          >
-                            ☑︎
-                          </button>
-                        </td>
-                        <td
-                          className="border px-4 py-2 cursor-pointer hover:bg-gray-100 line-through"
-                          onClick={() => openTaskDetail(task)}
-                        >
-                          {task.title}
-                        </td>
-                        <td className="border px-4 py-2">
-                          {task.deadLine ? task.deadLine : "なし"}
-                        </td>
-                      </tr>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </tbody>
-            </table>
+            <ul className="list-none w-full" {...provided.droppableProps} ref={provided.innerRef}>
+              {filteredCompletedTaskItems.length == 0 ? <div className="text-gray-500">完了タスクはありません。</div> : ""}
+              {filteredCompletedTaskItems.map((task, index) => (
+                <Draggable key={task.id} draggableId={task.id.toString()} index={index}>
+                  {(provided, snapshot) => (
+                    <li
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                      ref={provided.innerRef}
+                      className="bg-white flex items-center justify-between mb-2 p-2 border"
+                    >
+                      <button
+                        onClick={() => switchInCompleted(task)}
+                        className=" text-xl text-blue-500 hover:text-blue-700"
+                      >
+                        ☑︎
+                      </button>
+                      <span
+                        onClick={() => openTaskDetail(task)}
+                        className="cursor-pointer hover:bg-gray-100 flex-grow mx-2 line-through"
+                      >
+                        {task.title}
+                      </span>
+                      <span className="text-center w-32">
+                        {task.deadLine ? task.deadLine : "なし"}
+                      </span>
+                    </li>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </ul>
           )}
         </Droppable>
       </DragDropContext>

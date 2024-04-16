@@ -44,55 +44,44 @@ const InCompletedTaskList: React.FC = () => {
     setShowTaskDetail(taskItem);
   };
 
-
   return (
     <div className="mt-4">
       <h2 className="text-xl font-bold mb-2">未完了タスク</h2>
       <DragDropContext onDragEnd={() => {}}>
         <Droppable droppableId="incompleteTasks">
           {(provided, snapshot) => (
-            <table className="table-auto w-full">
-              <thead>
-                <tr className="bg-gray-200">
-                  <th className="px-4 py-2 w-20">Check</th>
-                  <th className="px-4 py-2 w-auto">タイトル</th>
-                  <th className="px-4 py-2 w-32">期日</th>
-                </tr>
-              </thead>
-              <tbody {...provided.droppableProps} ref={provided.innerRef}>
-                {filteredInCompletedTaskItems.map((task, index) => (
-                  <Draggable key={task.id} draggableId={task.id.toString()} index={index}>
-                    {(provided, snapshot) => (
-                      <tr
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        ref={provided.innerRef}
-                        className="bg-white"
+            <ul className="list-none w-full" {...provided.droppableProps} ref={provided.innerRef}>
+              {filteredInCompletedTaskItems.length == 0 ? <div className="text-gray-500">未完了タスクはありません。</div> : ""}
+              {filteredInCompletedTaskItems.map((task, index) => (
+                <Draggable key={task.id} draggableId={task.id.toString()} index={index}>
+                  {(provided, snapshot) => (
+                    <li
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                      ref={provided.innerRef}
+                      className="bg-white flex items-center justify-between mb-2 p-2 border"
+                    >
+                      <button
+                        onClick={() => switchCompleted(task)}
+                        className="text-xl text-blue-500 hover:text-blue-700"
                       >
-                        <td className="border px-4 py-2 w-20 text-center">
-                          <button
-                            onClick={() => switchCompleted(task)}
-                            className="text-blue-500 hover:text-blue-700"
-                          >
-                            ◻︎
-                          </button>
-                        </td>
-                        <td
-                          className="border px-4 py-2 cursor-pointer hover:bg-gray-100 w-auto"
-                          onClick={() => openTaskDetail(task)}
-                        >
-                          {task.title}
-                        </td>
-                        <td className="border px-4 py-2 w-32 text-center">
-                          {task.deadLine ? task.deadLine : "なし"}
-                        </td>
-                      </tr>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </tbody>
-            </table>
+                        ◻︎
+                      </button>
+                      <span
+                        onClick={() => openTaskDetail(task)}
+                        className="cursor-pointer hover:bg-gray-100 flex-grow mx-2"
+                      >
+                        {task.title}
+                      </span>
+                      <span className="text-center w-32">
+                        {task.deadLine ? task.deadLine : "なし"}
+                      </span>
+                    </li>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </ul>
           )}
         </Droppable>
       </DragDropContext>
