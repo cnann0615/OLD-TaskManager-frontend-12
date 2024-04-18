@@ -41,22 +41,38 @@ const CompletedTaskList: React.FC = () => {
     setShowTaskDetail(taskItem);
     window.scrollTo({
       top: document.documentElement.scrollHeight,
-      behavior: 'smooth'
+      behavior: "smooth",
     });
   };
 
   // ドラッグ＆ドロップ処理
-  const onDragEnd = (result) => {
-    
-  }
+  const onDragEnd = (result: any) => {
+    const startIndex = result.source.index;
+    const endIndex = result.destination.index;
+
+    if (startIndex === endIndex) {
+      return;
+    } else if (startIndex < endIndex) {
+    } else if (startIndex > endIndex) {
+    }
+  };
+
   return (
     <div className="mt-4">
       <h2 className="text-xl font-bold mb-2">完了タスク</h2>
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="completedTasks">
           {(provided) => (
-            <ul className="list-none w-full" {...provided.droppableProps} ref={provided.innerRef}>
-              {filteredCompletedTaskItems.length == 0 ? <div className="text-gray-500">完了タスクはありません。</div> : ""}
+            <ul
+              className="list-none w-full"
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+            >
+              {filteredCompletedTaskItems.length == 0 ? (
+                <div className="text-gray-500">完了タスクはありません。</div>
+              ) : (
+                ""
+              )}
               {filteredCompletedTaskItems.map((task, index) => (
                 <Draggable key={task.id} draggableId={task.title} index={index}>
                   {(provided, snapshot) => (

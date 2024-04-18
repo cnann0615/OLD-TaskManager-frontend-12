@@ -44,14 +44,21 @@ const InCompletedTaskList: React.FC = () => {
     setShowTaskDetail(taskItem);
     window.scrollTo({
       top: document.documentElement.scrollHeight,
-      behavior: 'smooth'
+      behavior: "smooth",
     });
   };
 
   // ドラッグ＆ドロップ処理
-  const onDragEnd = (result) => {
+  const onDragEnd = (result: any) => {
+    const startIndex = result.source.index;
+    const endIndex = result.destination.index;
 
-  }
+    if (startIndex === endIndex) {
+      return;
+    } else if (startIndex < endIndex) {
+    } else if (startIndex > endIndex) {
+    }
+  };
 
   return (
     <div className="mt-4">
@@ -59,8 +66,16 @@ const InCompletedTaskList: React.FC = () => {
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="inCompleteTasks">
           {(provided, snapshot) => (
-            <ul className="list-none w-full" {...provided.droppableProps} ref={provided.innerRef}>
-              {filteredInCompletedTaskItems.length == 0 ? <div className="text-gray-500">未完了タスクはありません。</div> : ""}
+            <ul
+              className="list-none w-full"
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+            >
+              {filteredInCompletedTaskItems.length == 0 ? (
+                <div className="text-gray-500">未完了タスクはありません。</div>
+              ) : (
+                ""
+              )}
               {filteredInCompletedTaskItems.map((task, index) => (
                 <Draggable key={task.id} draggableId={task.title} index={index}>
                   {(provided, snapshot) => (
@@ -83,7 +98,7 @@ const InCompletedTaskList: React.FC = () => {
                         {task.title}
                       </span>
                       <span className="text-center w-32">
-                       〆 {task.deadLine ? task.deadLine : "なし"}
+                        〆 {task.deadLine ? task.deadLine : "なし"}
                       </span>
                     </li>
                   )}
