@@ -18,7 +18,7 @@ const ListTab: React.FC = () => {
   // カテゴリStateを取得
   const categories = useSelector((state) => state.categories);
 
-  // タブカテゴリ管理State
+  // タブカテゴリ管理State（どのタブが選択されているかを管理）
   const { tabCategory, setTabCategory } = useContext(tabCategoryContext);
 
   // タブクリック時にタブカテゴリにセットする
@@ -35,12 +35,14 @@ const ListTab: React.FC = () => {
 
   // 編集中のカテゴリIDとカテゴリ名を保持するためのState
   const [editCategoryId, setEditCategoryId] = useState<number | null>(null);
+  const [editCategoryOrderIndex, setEditCategoryOrderIndex] = useState<number | null>(null);
   const [editCategoryName, setEditCategoryName] = useState("");
 
   // カテゴリ名変更ボタン押下時に、対象のカテゴリのIDと名前をStateにセット
   const editCategory = (category: Category) => {
     setEditCategoryId(category.id);
     setEditCategoryName(category.name);
+    setEditCategoryOrderIndex(category.orderIndex);
   };
 
   // 編集内容を確定し、Stateを更新（対象のカテゴリからカーソルが離れた時）
@@ -49,6 +51,7 @@ const ListTab: React.FC = () => {
     const updateCategory = {
       id: editCategoryId,
       name: editCategoryName,
+      orderIndex: editCategoryOrderIndex
     };
     dispatch(categoryUpdate(updateCategory));
 
@@ -59,7 +62,7 @@ const ListTab: React.FC = () => {
       if (showTaskDetail.category.id === updateCategory.id) {
         updateShowTaskDetail = {
           ...showTaskDetail,
-          category: { id: updateCategory.id, name: updateCategory.name },
+          category: { id: updateCategory.id, name: updateCategory.name, orderIndex: updateCategory.orderIndex },
         };
       }
       setShowTaskDetail(updateShowTaskDetail);
