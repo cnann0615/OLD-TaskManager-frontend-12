@@ -30,7 +30,7 @@ const CompletedTaskList: React.FC = () => {
   // タスク未完了処理
   const switchInCompleted = async (updateTask: TaskItem) => {
     dispatch(completedTaskDelete(updateTask));
-    const _updateTask = { ...updateTask, isCompleted: false };
+    const _updateTask = { ...updateTask, completed: false };
     dispatch(inCompletedTaskAdd(_updateTask));
     await taskApi.updateTask(_updateTask);
   };
@@ -39,18 +39,42 @@ const CompletedTaskList: React.FC = () => {
   const { setShowTaskDetail } = useContext(showTaskDetailContext);
   const openTaskDetail = (taskItem: TaskItem) => {
     setShowTaskDetail(taskItem);
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: "smooth",
+    });
+  };
+
+  // ドラッグ＆ドロップ処理
+  const onDragEnd = (result: any) => {
+    const startIndex = result.source.index;
+    const endIndex = result.destination.index;
+
+    if (startIndex === endIndex) {
+      return;
+    } else if (startIndex < endIndex) {
+    } else if (startIndex > endIndex) {
+    }
   };
 
   return (
     <div className="mt-4">
       <h2 className="text-xl font-bold mb-2">完了タスク</h2>
-      <DragDropContext onDragEnd={() => {}}>
+      <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="completedTasks">
           {(provided) => (
-            <ul className="list-none w-full" {...provided.droppableProps} ref={provided.innerRef}>
-              {filteredCompletedTaskItems.length == 0 ? <div className="text-gray-500">完了タスクはありません。</div> : ""}
+            <ul
+              className="list-none w-full"
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+            >
+              {filteredCompletedTaskItems.length == 0 ? (
+                <div className="text-gray-500">完了タスクはありません。</div>
+              ) : (
+                ""
+              )}
               {filteredCompletedTaskItems.map((task, index) => (
-                <Draggable key={task.id} draggableId={task.id.toString()} index={index}>
+                <Draggable key={task.id} draggableId={task.title} index={index}>
                   {(provided, snapshot) => (
                     <li
                       {...provided.draggableProps}
@@ -71,7 +95,7 @@ const CompletedTaskList: React.FC = () => {
                         {task.title}
                       </span>
                       <span className="text-center w-32">
-                        {task.deadLine ? task.deadLine : "なし"}
+                        〆 {task.deadLine ? task.deadLine : "なし"}
                       </span>
                     </li>
                   )}

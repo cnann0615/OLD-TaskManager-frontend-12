@@ -17,7 +17,6 @@ const taskApi = {
   // 未完了タスク取得
   async inCompletedTaskGet() {
     const result = await axios.get(ENDPOINT_URL + "/inCompletedTask");
-    console.log(result.data);
     return result.data;
   },
   // 完了タスク取得
@@ -35,6 +34,11 @@ const taskApi = {
     const result = await axios.get(ENDPOINT_URL + "/latestTask");
     return result.data;
   },
+  // 最大のorderIndex（タスク）を取得
+  async maxTaskOrderIndexGet() {
+    let result = await axios.get(ENDPOINT_URL + "/maxTaskOrderIndex");
+    return result.data;
+  },
   // カテゴリ取得///////////////
   // 全カテゴリ取得
   async categoryGetAll() {
@@ -49,6 +53,11 @@ const taskApi = {
   // カテゴリをidから取得
   async categoryGetById(id: number) {
     const result = await axios.get(ENDPOINT_URL + "/category/" + id);
+    return result.data;
+  },
+  // 最大のorderIndex（カテゴリ）を取得
+  async maxCategoryOrderIndexGet() {
+    let result = await axios.get(ENDPOINT_URL + "/maxCategoryOrderIndex");
     return result.data;
   },
 

@@ -33,7 +33,7 @@ const InCompletedTaskList: React.FC = () => {
   // タスク完了処理（buttonのonClick時に発火）
   const switchCompleted = async (updateTask: TaskItem) => {
     dispatch(inCompletedTaskDelete(updateTask));
-    const _updateTask = { ...updateTask, isCompleted: true };
+    const _updateTask = { ...updateTask, completed: true };
     dispatch(completedTaskAdd(_updateTask));
     await taskApi.updateTask(_updateTask);
   };
@@ -42,18 +42,42 @@ const InCompletedTaskList: React.FC = () => {
   const { setShowTaskDetail } = useContext(showTaskDetailContext);
   const openTaskDetail = (taskItem: TaskItem) => {
     setShowTaskDetail(taskItem);
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: "smooth",
+    });
+  };
+
+  // ドラッグ＆ドロップ処理
+  const onDragEnd = (result: any) => {
+    const startIndex = result.source.index;
+    const endIndex = result.destination.index;
+
+    if (startIndex === endIndex) {
+      return;
+    } else if (startIndex < endIndex) {
+    } else if (startIndex > endIndex) {
+    }
   };
 
   return (
     <div className="mt-4">
       <h2 className="text-xl font-bold mb-2">未完了タスク</h2>
-      <DragDropContext onDragEnd={() => {}}>
-        <Droppable droppableId="incompleteTasks">
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Droppable droppableId="inCompleteTasks">
           {(provided, snapshot) => (
-            <ul className="list-none w-full" {...provided.droppableProps} ref={provided.innerRef}>
-              {filteredInCompletedTaskItems.length == 0 ? <div className="text-gray-500">未完了タスクはありません。</div> : ""}
+            <ul
+              className="list-none w-full"
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+            >
+              {filteredInCompletedTaskItems.length == 0 ? (
+                <div className="text-gray-500">未完了タスクはありません。</div>
+              ) : (
+                ""
+              )}
               {filteredInCompletedTaskItems.map((task, index) => (
-                <Draggable key={task.id} draggableId={task.id.toString()} index={index}>
+                <Draggable key={task.id} draggableId={task.title} index={index}>
                   {(provided, snapshot) => (
                     <li
                       {...provided.draggableProps}
@@ -63,7 +87,7 @@ const InCompletedTaskList: React.FC = () => {
                     >
                       <button
                         onClick={() => switchCompleted(task)}
-                        className="text-xl text-blue-500 hover:text-blue-700"
+                        className="text-xl text-blue-500 hover:text-blue-700 font-bold"
                       >
                         ◻︎
                       </button>
@@ -74,7 +98,7 @@ const InCompletedTaskList: React.FC = () => {
                         {task.title}
                       </span>
                       <span className="text-center w-32">
-                        {task.deadLine ? task.deadLine : "なし"}
+                        〆 {task.deadLine ? task.deadLine : "なし"}
                       </span>
                     </li>
                   )}

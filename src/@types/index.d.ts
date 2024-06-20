@@ -2,6 +2,7 @@
 export interface Category {
   id?: number;
   name: string;
+  orderIndex: number;
 }
 // タスク型
 export interface TaskItem {
@@ -11,6 +12,7 @@ export interface TaskItem {
   category: Category;
   memo: string;
   isCompleted: boolean;
+  orderIndex: number;
 }
 
 // form入力時のタスク型

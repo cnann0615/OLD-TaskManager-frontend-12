@@ -9,6 +9,7 @@ import { inCompletedTaskUpdateCategory } from "@/slices/inCompletedTaskSlice";
 import { completedTaskUpdateCategory } from "@/slices/completedTaskSlice";
 
 import { useContext, useState } from "react";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 // カテゴリのタブリスト
 const ListTab: React.FC = () => {
@@ -17,7 +18,7 @@ const ListTab: React.FC = () => {
   // カテゴリStateを取得
   const categories = useSelector((state) => state.categories);
 
-  // タブカテゴリ管理State
+  // タブカテゴリ管理State（どのタブが選択されているかを管理）
   const { tabCategory, setTabCategory } = useContext(tabCategoryContext);
 
   // タブクリック時にタブカテゴリにセットする
@@ -34,12 +35,16 @@ const ListTab: React.FC = () => {
 
   // 編集中のカテゴリIDとカテゴリ名を保持するためのState
   const [editCategoryId, setEditCategoryId] = useState<number | null>(null);
+  const [editCategoryOrderIndex, setEditCategoryOrderIndex] = useState<
+    number | null
+  >(null);
   const [editCategoryName, setEditCategoryName] = useState("");
 
   // カテゴリ名変更ボタン押下時に、対象のカテゴリのIDと名前をStateにセット
   const editCategory = (category: Category) => {
     setEditCategoryId(category.id);
     setEditCategoryName(category.name);
+    setEditCategoryOrderIndex(category.orderIndex);
   };
 
   // 編集内容を確定し、Stateを更新（対象のカテゴリからカーソルが離れた時）
@@ -48,6 +53,7 @@ const ListTab: React.FC = () => {
     const updateCategory = {
       id: editCategoryId,
       name: editCategoryName,
+      orderIndex: editCategoryOrderIndex,
     };
     dispatch(categoryUpdate(updateCategory));
 
@@ -58,7 +64,11 @@ const ListTab: React.FC = () => {
       if (showTaskDetail.category.id === updateCategory.id) {
         updateShowTaskDetail = {
           ...showTaskDetail,
-          category: { id: updateCategory.id, name: updateCategory.name },
+          category: {
+            id: updateCategory.id,
+            name: updateCategory.name,
+            orderIndex: updateCategory.orderIndex,
+          },
         };
       }
       setShowTaskDetail(updateShowTaskDetail);
@@ -77,48 +87,86 @@ const ListTab: React.FC = () => {
     setEditCategoryId(null);
   };
 
+    // ドラッグ＆ドロップ処理
+    const onDragEnd = (result: any) => {
+      const startIndex = result.source.index;
+      const endIndex = result.destination.index;
+  
+      if (startIndex === endIndex) {
+        return;
+      } else if (startIndex < endIndex) {
+      } else if (startIndex > endIndex) {
+      }
+    };
+
   return (
     <div className="border-b border-gray-300">
       <button
         onClick={() => switchTab(0)}
         className={`bg-gray-200 hover:bg-gray-300 text-black py-2 px-4 rounded-t focus:outline-none focus:shadow-outline m-1 ${
-          tabCategory === 0 ? " font-bold" : ""
+          tabCategory === 0 ? "font-bold" : ""
         }`}
       >
         全てのタスク
       </button>
-      {categories.categories.map((category) => (
-        <div key={category.id} className="inline-block">
-          {editCategoryId === category.id ? (
-            <input
-              type="text"
-              value={editCategoryName}
-              onChange={(e) => setEditCategoryName(e.target.value)}
-              onBlur={commitEdit}
-              autoFocus
-              className="py-2 px-4 rounded-t m-1"
-            />
-          ) : (
-            <button
-              onClick={() => switchTab(category.id)}
-              className={`bg-gray-200 hover:bg-gray-300 text-black py-2 px-4 rounded-t focus:outline-none focus:shadow-outline m-1 ${
-                tabCategory === category.id ? "font-bold" : ""
-              }`}
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Droppable droppableId="tabs" direction="horizontal">
+          {(provided) => (
+            <div
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+              className="inline-block"
             >
-              {category.name}
-              <span
-                onClick={(e) => {
-                  e.stopPropagation(); // ボタン内のボタンのクリックイベントを阻止
-                  editCategory(category);
-                }}
-                className="text-xs my-0 ml-3 opacity-50 hover:opacity-100 cursor-pointer"
-              >
-                ✏️
-              </span>
-            </button>
+              {categories.categories.map((category, index) => (
+                <Draggable
+                  key={category.id}
+                  draggableId={category.id.toString()}
+                  index={index}
+                >
+                  {(provided) => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                      className="inline-block"
+                    >
+                      {editCategoryId === category.id ? (
+                        <input
+                          type="text"
+                          value={editCategoryName}
+                          onChange={(e) => setEditCategoryName(e.target.value)}
+                          onBlur={commitEdit}
+                          autoFocus
+                          className="py-2 px-4 rounded-t m-1"
+                        />
+                      ) : (
+                        <button
+                          onClick={() => switchTab(category.id)}
+                          className={`bg-gray-200 hover:bg-gray-300 text-black py-2 px-4 rounded-t focus:outline-none focus:shadow-outline m-1 ${
+                            tabCategory === category.id ? "font-bold" : ""
+                          }`}
+                        >
+                          {category.name}
+                          <span
+                            onClick={(e) => {
+                              e.stopPropagation(); // ボタン内のボタンのクリックイベントを阻止
+                              editCategory(category);
+                            }}
+                            className="text-xs my-0 ml-3 opacity-50 hover:opacity-100 cursor-pointer"
+                          >
+                            ✏️
+                          </span>
+                        </button>
+                      )}
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </div>
           )}
-        </div>
-      ))}
+        </Droppable>
+      </DragDropContext>
     </div>
   );
 };

@@ -41,13 +41,21 @@ const TaskAdd: React.FC = () => {
     const category: Category = await taskApi.categoryGetById(
       Number(taskItem.category)
     );
+    // APIから新規タスク用のorderIndexを取得
+    let orderIndex = await taskApi.maxTaskOrderIndexGet();
+    if (orderIndex) {
+      orderIndex += 1;
+    } else {
+      orderIndex = 1;
+    }
     // 新しいタスクオブジェクトを作成
     const newTask: TaskItem = {
       title: taskItem.title,
       deadLine: taskItem.deadLine,
-      category: category,
+      category: category,                                       
       memo: taskItem.memo,
       isCompleted: false,
+      orderIndex: orderIndex
     };
     // 新しいタスクをAPI経由でデータベースに追加
     await taskApi.taskAdd(newTask);
