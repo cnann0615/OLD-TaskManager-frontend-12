@@ -52,7 +52,7 @@ const TaskAdd: React.FC = () => {
     const newTask: TaskItem = {
       title: taskItem.title,
       deadLine: taskItem.deadLine,
-      category: category,
+      category: category,                                       
       memo: taskItem.memo,
       isCompleted: false,
       orderIndex: orderIndex

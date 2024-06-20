@@ -87,6 +87,18 @@ const ListTab: React.FC = () => {
     setEditCategoryId(null);
   };
 
+    // ドラッグ＆ドロップ処理
+    const onDragEnd = (result: any) => {
+      const startIndex = result.source.index;
+      const endIndex = result.destination.index;
+  
+      if (startIndex === endIndex) {
+        return;
+      } else if (startIndex < endIndex) {
+      } else if (startIndex > endIndex) {
+      }
+    };
+
   return (
     <div className="border-b border-gray-300">
       <button
@@ -97,7 +109,7 @@ const ListTab: React.FC = () => {
       >
         全てのタスク
       </button>
-      <DragDropContext onDragEnd={() => {}}>
+      <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="tabs" direction="horizontal">
           {(provided) => (
             <div
